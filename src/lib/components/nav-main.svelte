@@ -22,7 +22,8 @@
 </script>
 
 <Sidebar.Group>
-	<Sidebar.GroupLabel>Platform</Sidebar.GroupLabel>
+	<!-- for the group label, in case i wanna add more menus -->
+	<!-- <Sidebar.GroupLabel>Platform</Sidebar.GroupLabel> -->
 	<Sidebar.Menu>
 		{#each items as mainItem (mainItem.title)}
 			<Collapsible.Root open={mainItem.isActive}>

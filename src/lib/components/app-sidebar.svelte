@@ -7,7 +7,10 @@
 	import MapIcon from "@lucide/svelte/icons/map";
 	import SendIcon from "@lucide/svelte/icons/send";
 	import Settings2Icon from "@lucide/svelte/icons/settings-2";
-	import SquareTerminalIcon from "@lucide/svelte/icons/square-terminal";
+	import LayoutDashboardIcon from "@lucide/svelte/icons/layout-dashboard";
+	import HandshakeIcon from "@lucide/svelte/icons/handshake";
+	import BoxesIcon from "@lucide/svelte/icons/boxes";
+	import DataIcon from "@lucide/svelte/icons/chart-no-axes-combined";
 
 	const data = {
 		user: {
@@ -17,71 +20,80 @@
 		},
 		navMain: [
 			{
-				title: "Playground",
-				url: "#",
-				icon: SquareTerminalIcon,
+				title: "Dashboard",
+				url: "/dashboard",
+				icon: LayoutDashboardIcon,
 				isActive: true,
 				items: [
-					{
-						title: "History",
-						url: "#",
-					},
-					{
-						title: "Starred",
-						url: "#",
-					},
-					{
-						title: "Settings",
-						url: "#",
-					},
+					
 				],
 			},
 			{
-				title: "Models",
+				title: "Tim",
 				url: "#",
-				icon: BotIcon,
+				icon: HandshakeIcon,
 				items: [
 					{
-						title: "Genesis",
-						url: "#",
+						title: "Subbagian Umum",
+						url: "tim/umum",
 					},
 					{
-						title: "Explorer",
-						url: "#",
+						title: "Distribusi",
+						url: "tim/distribusi",
 					},
 					{
-						title: "Quantum",
-						url: "#",
+						title: "Neraca",
+						url: "tim/neraca",
+					},
+					{
+						title: "Sosial",
+						url: "tim/sosial",
+					},
+					{
+						title: "Produksi",
+						url: "tim/produksi",
+					},
+					{
+						title: "IPDS",
+						url: "tim/ipds",
 					},
 				],
 			},
 			{
-				title: "Documentation",
+				title: "Sub Tim",
 				url: "#",
-				icon: BookOpenIcon,
+				icon: BoxesIcon,
 				items: [
 					{
-						title: "Introduction",
+						title: "Zona Integritas",
 						url: "#",
 					},
 					{
-						title: "Get Started",
+						title: "PEKPPP",
 						url: "#",
 					},
 					{
-						title: "Tutorials",
+						title: "Humas",
 						url: "#",
 					},
 					{
-						title: "Changelog",
+						title: "Sakip",
+						url: "#",
+					},
+					{
+						title: "Sektoral",
+						url: "#",
+					},
+					{
+						title: "Desa Cantik",
 						url: "#",
 					},
 				],
 			},
 			{
-				title: "Settings",
+				title: "Data Strategis",
 				url: "#",
-				icon: Settings2Icon,
+				icon: DataIcon,
 				items: [
 					{
 						title: "General",
@@ -169,10 +181,12 @@
 	</Sidebar.Header>
 	<Sidebar.Content>
 		<NavMain items={data.navMain} />
-		<NavProjects projects={data.projects} />
-		<NavSecondary items={data.navSecondary} class="mt-auto" />
+		<!-- in case i wanna add more navbar -->
+		<!-- <NavProjects projects={data.projects} /> -->
+		<!-- <NavSecondary items={data.navSecondary} class="mt-auto" /> -->
 	</Sidebar.Content>
 	<Sidebar.Footer>
-		<NavUser user={data.user} />
+		<!-- auth/user -->
+		<!-- <NavUser user={data.user} /> -->
 	</Sidebar.Footer>
 </Sidebar.Root>
