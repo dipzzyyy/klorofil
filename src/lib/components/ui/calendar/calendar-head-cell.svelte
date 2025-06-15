@@ -13,7 +13,7 @@
 	bind:ref
 	class={cn(
 		// i added w-full min-w-min
-		"text-muted-foreground w-(--cell-size) rounded-md text-[0.8rem] font-normal w-full min-w-min",
+		"text-muted-foreground w-(--cell-size) rounded-md text-[0.8rem] font-normal w-full w-min-w",
 		className
 	)}
 	{...restProps}

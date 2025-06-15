@@ -23,11 +23,13 @@
       </div>
     </header>
     <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
-      <div class="grid auto-rows-min gap-4 md:grid-cols-2">
-        <div class="aspect-video rounded-xl w-full max-w-md mx-auto p-4 sm:p-6 md:p-8">
+      <div class="grid auto-rows-min gap-4 lg:grid-cols-2">
+        <div class="aspect-video rounded-xl w-full max-w-min p-4 sm:p-6 md:p-8">
           <CalendarEvent />
         </div>
-        <div class="bg-muted/50 aspect-video rounded-xl"></div>
+        <div class="bg-muted/50 aspect-video rounded-xl">
+          cs
+        </div>
       </div>
       <div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min"></div>
     </div>
