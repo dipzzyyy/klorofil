@@ -17,11 +17,11 @@
     } = $props();
 </script>
 
-<Card.Root class="w-full max-w-sm p-4">
+<Card.Root class="w-full p-4">
     <Card.Header class="pt-4"> 
         <Card.Title>Informasi Terkini</Card.Title>
         <Card.Description>Pengumuman terbaru di BPS Kabupaten Rokan Hilir</Card.Description>
-        <Card.Action>
+        <Card.Action class="w-full flex justify-end">
             <Button>Lihat semua</Button>
         </Card.Action>
     </Card.Header>

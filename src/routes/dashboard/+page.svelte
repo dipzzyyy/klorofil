@@ -5,6 +5,7 @@
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
   import CalendarEvent from "$lib/components/calendar-31.svelte"
   import InformationBoard from "$lib/components/app-information.svelte"
+  import FileBoard from "$lib/components/file-board.svelte"
 </script>
 
 <Sidebar.Provider>
@@ -23,18 +24,29 @@
         </Breadcrumb.Root>
       </div>
     </header>
-    <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
-      <div class="grid auto-rows-min gap-4 md:grid-cols-2">
+    <div class="flex flex-col gap-4 p-4 pt-0">
+      <div class="w-full max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-4">
         <!-- calendar -->
-        <div class="aspect-video rounded-xl w-full max-w-min p-4 sm:p-6 md:p-8">
-          <CalendarEvent />
+        <div class="w-full min-w-0">
+          <div class="rounded-xl w-full h-full p-4 sm:p-6 md:p-8 bg-white shadow">
+            <CalendarEvent />
+          </div>
         </div>
-        <!-- information board -->
-        <div class="bg-muted/50 aspect-video rounded-xl">
-          <InformationBoard/>
+    
+        <!-- info board -->
+        <div class="w-full min-w-0">
+          <div class="rounded-xl w-full h-full p-4 sm:p-6 md:p-8 bg-white shadow min-w-2xs">
+            <InformationBoard />
+          </div>
         </div>
       </div>
-      <div class="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min"></div>
-    </div>
+    
+      <!-- file board always below -->
+      <div class="w-full max-w-screen-xl mx-auto">
+        <div class="bg-muted/50 rounded-xl p-4 sm:p-6 md:p-8">
+          <FileBoard />
+        </div>
+      </div>
+    </div>    
   </Sidebar.Inset>
 </Sidebar.Provider>

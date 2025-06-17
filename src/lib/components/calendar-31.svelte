@@ -27,7 +27,7 @@
 	let value = $state<DateValue | undefined>(new CalendarDate(2025, 6, 12));
 </script>
 
-<Card.Root class="w-fit py-4">
+<Card.Root class="w-full py-4">
 	<Card.Content class="w-full px-4">
 		<Calendar type="single" bind:value class="bg-transparent p-0" preventDeselect />
 	</Card.Content>

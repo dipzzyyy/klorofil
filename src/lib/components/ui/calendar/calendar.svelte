@@ -81,7 +81,7 @@ get along, so we shut typescript up by casting `value` to `never`.
 					</Calendar.Header>
 					<Calendar.Grid>
 						<Calendar.GridHead>
-							<Calendar.GridRow class="select-none">
+							<Calendar.GridRow class="grid grid-cols-7 w-full select-none">
 								{#each weekdays as weekday (weekday)}
 									<Calendar.HeadCell>
 										{weekday.slice(0, 2)}
@@ -91,7 +91,7 @@ get along, so we shut typescript up by casting `value` to `never`.
 						</Calendar.GridHead>
 						<Calendar.GridBody>
 							{#each month.weeks as weekDates (weekDates)}
-								<Calendar.GridRow class="mt-2 w-full">
+								<Calendar.GridRow class="grid grid-cols-7 gap-0 w-full">
 									{#each weekDates as date (date)}
 										<Calendar.Cell {date} month={month.value}>
 											{#if day}
