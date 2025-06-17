@@ -4,7 +4,7 @@
   import { Separator } from "$lib/components/ui/separator/index.js";
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
   import CalendarEvent from "$lib/components/calendar-31.svelte"
-  import InformationBoard from "$lib/components/information.svelte"
+  import InformationBoard from "$lib/components/app-information.svelte"
 </script>
 
 <Sidebar.Provider>
@@ -24,7 +24,7 @@
       </div>
     </header>
     <div class="flex flex-1 flex-col gap-4 p-4 pt-0">
-      <div class="grid auto-rows-min gap-4 lg:grid-cols-2">
+      <div class="grid auto-rows-min gap-4 md:grid-cols-2">
         <!-- calendar -->
         <div class="aspect-video rounded-xl w-full max-w-min p-4 sm:p-6 md:p-8">
           <CalendarEvent />
