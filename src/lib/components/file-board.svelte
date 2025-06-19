@@ -32,7 +32,7 @@
                     </Button>
                 </div>
             </div>
-            <div class="col-span-2 rounded-sm bg-white p-4 h-full border-1 border-gray-200">
+            <!-- <div class="col-span-2 rounded-sm bg-white p-4 h-full border-1 border-gray-200">
                 <div class="grid grid-rows-2 gap-4">
                     <Card.Root class="w-full p-4">
                         <Card.Header>
@@ -45,7 +45,7 @@
                     </Card.Root>
                     <FileBlock/>
                 </div>
-            </div>
+            </div> -->
         </div>
     </Card.Content>
 </Card.Root>

@@ -37,10 +37,11 @@ export const columns: ColumnDef<File>[] = [
  {
   accessorKey: "date",
   header: ({ column }) =>
-    renderComponent(DataTableSortable, {
-      label: "Tanggal Unggah",
-      onclick: column.getToggleSortingHandler(),
-    }),
+    renderComponent(DataTableColumnHeader<File, unknown>, { column, title: "Tanggal Unggah"}),
+    // renderComponent(DataTableSortable, {
+    //   label: "Tanggal Unggah",
+    //   onclick: column.getToggleSortingHandler(),
+    // }),
  },
  {
   id: "actions",

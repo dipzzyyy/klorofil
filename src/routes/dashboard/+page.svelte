@@ -59,6 +59,6 @@
           <DataTable data={data} columns={columns} />
         </div>
       </div>
-    </div>    
+    </div>
   </Sidebar.Inset>
 </Sidebar.Provider>

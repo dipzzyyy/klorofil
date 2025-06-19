@@ -54,17 +54,17 @@
 			<DropdownMenu.Content align="start">
 				<DropdownMenu.Item onclick={() => column.toggleSorting(false)}>
 					<ArrowUp class="text-muted-foreground/70 mr-2 size-3.5" />
-					Asc
+					Asc (A-Z)
 				</DropdownMenu.Item>
 				<DropdownMenu.Item onclick={() => column.toggleSorting(true)}>
 					<ArrowDown class="text-muted-foreground/70 mr-2 size-3.5" />
-					Desc
+					Desc (Z-A)
 				</DropdownMenu.Item>
-				<DropdownMenu.Separator />
+				<!-- <DropdownMenu.Separator />
 				<DropdownMenu.Item onclick={() => column.toggleVisibility(false)}>
 					<EyeOff class="text-muted-foreground/70 mr-2 size-3.5" />
 					Hide
-				</DropdownMenu.Item>
+				</DropdownMenu.Item> -->
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 	</div>
