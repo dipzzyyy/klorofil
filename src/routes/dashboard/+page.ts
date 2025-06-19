@@ -6,7 +6,7 @@ export const load = async () => {
         name: "Undangan Internalisasi Nilai BerAKHLAK Provinsi",
         description: "Fail-fail umum untuk seluruh pegawai BPS Kabupaten Rokan Hilir",
         label: "Umum",
-        link: "/files/umum",
+        link: "https://www.figma.com/design/e9gjRGa0gmFh45q4WQoDrl/Klorofil?node-id=0-1&p=f&t=T1IDB3793qnEKTNQ-0",
         date: new Date().toISOString(), // serialize
         importance: false,
       },
@@ -15,7 +15,7 @@ export const load = async () => {
         name: "Memo Dinas Internalisasi Nilai BerAKHLAK",
         description: "Fail-fail khusus untuk pegawai BPS Kabupaten Rokan Hilir",
         label: "Khusus",
-        link: "/files/khusus",
+        link: "https://drive.google.com/drive/folders/1zucZibvqZRcaK4jcqWBFaF8JnGQxwjna?usp=drive_link",
         date: new Date().toISOString(),
         importance: false,
       },
