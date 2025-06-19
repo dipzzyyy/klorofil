@@ -63,6 +63,7 @@
         },
         state: {
         get pagination() {
+            // only 10 items per page
             return pagination;
         },
         get sorting() {

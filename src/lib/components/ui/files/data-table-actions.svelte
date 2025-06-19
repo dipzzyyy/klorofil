@@ -3,6 +3,11 @@
     import LinkIcon from "@lucide/svelte/icons/link";
     import { Button } from "$lib/components/ui/button/index.js";
     import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
+    // import * as ToolTip from "$lib/components/ui/tooltip";
+    import { Tooltip } from "bits-ui";
+    // import TooltipContent from "../tooltip/tooltip-content.svelte";
+    import { Toaster } from "$lib/components/ui/sonner"
+    import { toast } from "svelte-sonner";
     
     let { id, link }: {
          id: string,
@@ -11,40 +16,68 @@
     = $props();
 
     function handleLinkClick() {
-        // navigator.clipboard.writeText(link);
-        window.open(link, "_blank");
-        // alert("Link copied to clipboard!");
+        navigator.clipboard.writeText(link);
+        // window.open(link, "_blank");
+        toast.success("URL berhasil disalin");
     }
    </script>
 
 <div>
     <!-- link button -->
-     <Button
-        variant ="ghost"
-        size="icon"
-        class="relative size-8 p-0"
-        onclick = {handleLinkClick}
-     >
-        <LinkIcon />
-     </Button>
-    <DropdownMenu.Root>
-     <DropdownMenu.Trigger>
-      {#snippet child({ props })}
-       <Button
-        {...props}
-        variant="ghost"
-        size="icon"
-        class="relative size-8 p-0"
-       >
-        <span class="sr-only">Open menu</span>
-        <EllipsisIcon />
-       </Button>
-      {/snippet}
-     </DropdownMenu.Trigger>
-     <DropdownMenu.Content>
-     <!-- bisa add group juga, i deleted that thou -->
-      <DropdownMenu.Item>Sunting</DropdownMenu.Item>
-      <DropdownMenu.Item>Hapus</DropdownMenu.Item>
-     </DropdownMenu.Content>
-    </DropdownMenu.Root>
+     <Tooltip.Provider>
+        <Tooltip.Root>
+            <Tooltip.Trigger>
+                <Button
+                variant="ghost"
+                size="icon"
+                class="relative size-8 p-0"
+                onclick={handleLinkClick}
+                >
+                <LinkIcon />
+                <span class="sr-only">Salin URL</span>
+                </Button>
+            </Tooltip.Trigger>
+            <Tooltip.Content
+            side="top"
+            align="center"
+            class="z-50 rounded-md bg-black px-3 py-1.5 text-sm text-white shadow-md"
+            >
+                <p>Salin URL</p>
+            </Tooltip.Content>
+        </Tooltip.Root>
+     </Tooltip.Provider>
+     <!-- dropdown menu -->
+     <Tooltip.Provider>
+         <Tooltip.Root>
+             <Tooltip.Trigger>
+                <DropdownMenu.Root>
+                    <DropdownMenu.Trigger>
+                    {#snippet child({ props })}
+                    <Button
+                        {...props}
+                        variant="ghost"
+                        size="icon"
+                        class="relative size-8 p-0"
+                    >
+                        <span class="sr-only">Aksi Lain</span>
+                        <EllipsisIcon />
+                    </Button>
+                    {/snippet}
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu.Content>
+                    <!-- bisa add group juga, i deleted that thou -->
+                    <DropdownMenu.Item>Sunting</DropdownMenu.Item>
+                    <DropdownMenu.Item>Hapus</DropdownMenu.Item>
+                    </DropdownMenu.Content>
+                </DropdownMenu.Root>
+            </Tooltip.Trigger>
+            <Tooltip.Content
+            side="top"
+            align="center"
+            class="z-50 rounded-md bg-black px-3 py-1.5 text-sm text-white shadow-md"
+            >
+                <p>Aksi Lain</p>
+            </Tooltip.Content>
+        </Tooltip.Root>
+     </Tooltip.Provider>
 </div>
