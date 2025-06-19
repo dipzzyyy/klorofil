@@ -6,6 +6,18 @@
   import CalendarEvent from "$lib/components/calendar-31.svelte"
   import InformationBoard from "$lib/components/app-information.svelte"
   import FileBoard from "$lib/components/file-board.svelte"
+  
+  import DataTable from "$lib/components/ui/files/data-table.svelte";
+  import { columns } from "$lib/components/ui/files/columns.js";
+  
+  let props = $props();
+  const data = props.data.data;
+  console.log("Data: ", data)  
+  console.log("loaded data: ", data);
+
+  console.log("typeof data:", typeof data);
+  console.log("Array.isArray(data):", Array.isArray(data));
+
 </script>
 
 <Sidebar.Provider>
@@ -44,7 +56,7 @@
       <!-- file board always below -->
       <div class="w-full max-w-screen-xl mx-auto">
         <div class="bg-muted/50 rounded-xl p-4 sm:p-6 md:p-8">
-          <FileBoard />
+          <DataTable data={data} columns={columns} />
         </div>
       </div>
     </div>    
