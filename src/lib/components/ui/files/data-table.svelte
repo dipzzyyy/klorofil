@@ -95,20 +95,20 @@
         <Card.Content>
             <div class="grid grid-cols-4 gap-4">
                 <div class="rounded-sm">
-                    <div class="rounded-sm bg-gray-50 p-4 h-full border-1 border-gray-200">
+                    <div class="rounded-sm bg-gray-50 p-2 h-full border-1 border-gray-200">
                         <!-- add perulangan disini -->
                         <Button 
-                        class="w-full text-left text-gray-900 hover:bg-gray-100 truncate"
+                        class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
                         variant="ghost">
                             Fail Umum
                         </Button>
                         <Button 
-                        class="w-full text-left text-gray-900 hover:bg-gray-100 truncate"
+                        class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
                         variant="ghost">
                             Fail Khusus
                         </Button>
                         <Button 
-                        class="w-full text-left text-gray-900 hover:bg-gray-100 truncate"
+                        class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
                         variant="ghost">
                             Pengumuman
                         </Button>

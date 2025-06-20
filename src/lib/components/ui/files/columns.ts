@@ -7,6 +7,7 @@ import DataTableSortable from "$lib/components/ui/files/data-table-sortable-butt
 import DataTableColumnHeader from "$lib/components/ui/files/data-table-column-header.svelte";
 import DataTableTitleCell from "$lib/components/ui/files/data-table-title-cell.svelte";
 import DataTableLinkCell from "$lib/components/ui/files/data-table-link-cell.svelte";
+import DataTableJudulCell from "$lib/components/ui/files/data-table-judul-cell.svelte";
  
 // This type is used to define the shape of our data.\
 export type File = {
@@ -25,9 +26,13 @@ export const columns: ColumnDef<File>[] = [
   header: ({ column }) => 
     renderComponent(DataTableColumnHeader<File, unknown>, { column, title: "Judul Fail"}),
   cell : ({ row }) => {
-    return renderComponent(DataTableTitleCell, {
+    return renderComponent(DataTableJudulCell, {
+      name: row.original.name,
       labelValue: row.original.label,
-      value: row.original.name
+      description: row.original.description,
+      link: row.original.link,
+      date: row.original.date,
+      importance: row.original.importance,
     });
   },
  },
