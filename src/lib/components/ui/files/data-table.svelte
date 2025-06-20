@@ -20,6 +20,11 @@
     import FileBoard from "$lib/components/file-board.svelte";
     import * as Card from "$lib/components/ui/card"
 
+    // modal
+    import { MediaQuery } from "svelte/reactivity";
+    import * as Dialog from "$lib/components/ui/dialog/index.js";
+    import * as Drawer from "$lib/components/ui/drawer/index.js";
+
     type DataTableProps<TData, TValue> = {
         data: TData[];
         columns: ColumnDef<TData, TValue>[];
@@ -74,6 +79,11 @@
         },
         },
     });
+
+    // modal
+    let selectedFile: File | null = null;
+    let drawerOpen = $state(false);
+    const isDesktop = new MediaQuery("(min-width: 768px)");
 </script>
 
 <div>

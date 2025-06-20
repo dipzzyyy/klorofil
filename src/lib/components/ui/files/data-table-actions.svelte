@@ -8,10 +8,13 @@
     // import TooltipContent from "../tooltip/tooltip-content.svelte";
     import { Toaster } from "$lib/components/ui/sonner"
     import { toast } from "svelte-sonner";
+    import { Badge } from "$lib/components/ui/badge"
+    import { TooltipContent } from "../tooltip";
     
-    let { id, link }: {
+    let { id, link, importance}: {
          id: string,
          link : string, 
+         importance?: boolean,
         } 
     = $props();
 
@@ -23,6 +26,21 @@
    </script>
 
 <div>
+    <!-- importance badge -->
+     <Tooltip.Provider>
+        <Tooltip.Root>
+            <Tooltip.Trigger>
+                <Badge
+                    class="h-3 min-w-3 rounded-full px-1 font-mono tabular-nums {importance ? '' : 'invisible'}"
+                    variant="destructive"
+                ></Badge>
+            </Tooltip.Trigger>
+            <TooltipContent>
+                <p>Urgent</p>
+            </TooltipContent>
+        </Tooltip.Root>
+     </Tooltip.Provider>
+
     <!-- link button -->
      <Tooltip.Provider>
         <Tooltip.Root>
@@ -46,6 +64,7 @@
             </Tooltip.Content>
         </Tooltip.Root>
      </Tooltip.Provider>
+     
      <!-- dropdown menu -->
      <Tooltip.Provider>
          <Tooltip.Root>
