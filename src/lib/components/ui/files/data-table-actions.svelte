@@ -14,7 +14,7 @@
     let { id, link, importance}: {
          id: string,
          link : string, 
-         importance?: boolean,
+         importance?: string,
         } 
     = $props();
 
@@ -26,7 +26,7 @@
    </script>
 
 <div>
-    <!-- importance badge -->
+    <!-- importance badge
      <Tooltip.Provider>
         <Tooltip.Root>
             <Tooltip.Trigger>
@@ -39,7 +39,7 @@
                 <p>Urgent</p>
             </TooltipContent>
         </Tooltip.Root>
-     </Tooltip.Provider>
+     </Tooltip.Provider> -->
 
     <!-- link button -->
      <Tooltip.Provider>

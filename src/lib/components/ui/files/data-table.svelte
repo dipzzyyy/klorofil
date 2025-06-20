@@ -22,8 +22,7 @@
     import PlusIcon from "@lucide/svelte/icons/plus"
     // modal
     import { MediaQuery } from "svelte/reactivity";
-    import * as Dialog from "$lib/components/ui/dialog/index.js";
-    import * as Drawer from "$lib/components/ui/drawer/index.js";
+    import DataTableFacetedFilter from "$lib/components/ui/files/data-table-faceted-filter.svelte";
 
     type DataTableProps<TData, TValue> = {
         data: TData[];
@@ -80,10 +79,6 @@
         },
     });
 
-    // modal
-    let selectedFile: File | null = null;
-    let drawerOpen = $state(false);
-    const isDesktop = new MediaQuery("(min-width: 768px)");
 </script>
 
 <div>
@@ -130,6 +125,16 @@
                             }}
                             class="max-w-sm"
                             />
+                        </div>
+                        <div class="m-3">
+                            <DataTableFacetedFilter
+                            column={table.getColumn("importance")!}
+                            title="Urgensi"
+                            options={[
+                                { label: "Urgent", value: "true" },
+                                { label: "Biasa", value: "false" }
+                            ]}
+                            />                
                         </div>
                         <!-- add button -->
                         <div class="col-span-1">

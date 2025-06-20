@@ -13,7 +13,7 @@
 		description,
 		link,
 		date,
-		importance = false,
+		importance = "false",
 	} = $props();
 
 	let open = $state(false);
@@ -50,7 +50,7 @@
                     <a href={link} target="_blank" class="inline-block max-w-[330px] truncate overflow-hidden whitespace-nowrap text-blue-600 underline align-middle">
                         {link}</a>
                 </p>
-                {#if importance}
+                {#if importance === "true"}
                     <Badge variant="destructive">Penting</Badge>
                 {/if}
 				<div class="flex justify-end gap-2 pt-4">
@@ -75,7 +75,7 @@
                     <a href={link} target="_blank" class="inline-block max-w-[330px] truncate overflow-hidden whitespace-nowrap text-blue-600 underline align-middle">
                         {link}</a>
                 </p>
-                {#if importance}
+                {#if importance  === "true"}
 					<Badge variant="destructive">Penting</Badge>
 				{/if}
 				<div class="flex justify-end gap-2 pt-4 pb-6">

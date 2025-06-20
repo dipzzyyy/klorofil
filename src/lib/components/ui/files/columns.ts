@@ -8,6 +8,7 @@ import DataTableColumnHeader from "$lib/components/ui/files/data-table-column-he
 import DataTableTitleCell from "$lib/components/ui/files/data-table-title-cell.svelte";
 import DataTableLinkCell from "$lib/components/ui/files/data-table-link-cell.svelte";
 import DataTableJudulCell from "$lib/components/ui/files/data-table-judul-cell.svelte";
+import DataTableImportanceBadge from "$lib/components/ui/files/data-table-badge.svelte";
  
 // This type is used to define the shape of our data.\
 export type File = {
@@ -17,7 +18,7 @@ export type File = {
   label?: string;
   link: string;
   date: Date;
-  importance?: boolean;
+  importance: string;
 };
  
 export const columns: ColumnDef<File>[] = [
@@ -36,10 +37,6 @@ export const columns: ColumnDef<File>[] = [
     });
   },
  },
-//  {
-//   accessorKey: "description",
-//   header: "Deskripsi",
-//  },
  {
   accessorKey: "date",
   header: ({ column }) =>
@@ -62,6 +59,20 @@ export const columns: ColumnDef<File>[] = [
       link: row.original.link,
     }),
  },
+ {
+  id: "importance",
+  accessorFn: (row) => row.importance,
+  header: () => null,
+  enableSorting: false,
+  cell: ({ row }) => {
+    return renderComponent(DataTableImportanceBadge, {
+      importance: row.original.importance
+    });
+  },
+  filterFn: (row, id, value: string[]) => {
+    return value.includes(row.getValue(id) as string);
+  },
+},
  {
   id: "actions",
   cell: ({ row }) => {
