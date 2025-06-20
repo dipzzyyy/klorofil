@@ -6,6 +6,7 @@ import DataTableActions from "$lib/components/ui/files/data-table-actions.svelte
 import DataTableSortable from "$lib/components/ui/files/data-table-sortable-button.svelte";
 import DataTableColumnHeader from "$lib/components/ui/files/data-table-column-header.svelte";
 import DataTableTitleCell from "$lib/components/ui/files/data-table-title-cell.svelte";
+import DataTableLinkCell from "$lib/components/ui/files/data-table-link-cell.svelte";
  
 // This type is used to define the shape of our data.\
 export type File = {
@@ -38,10 +39,23 @@ export const columns: ColumnDef<File>[] = [
   accessorKey: "date",
   header: ({ column }) =>
     renderComponent(DataTableColumnHeader<File, unknown>, { column, title: "Tanggal Unggah"}),
-    // renderComponent(DataTableSortable, {
-    //   label: "Tanggal Unggah",
-    //   onclick: column.getToggleSortingHandler(),
-    // }),
+  cell: ({ row }) => {
+    const formatted = new Intl.DateTimeFormat("id-ID", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(row.original.date));
+
+    return formatted;
+  },
+ },
+ {
+  accessorKey: "link",
+  header: "Tautan",
+  cell: ({ row }) =>
+    renderComponent(DataTableLinkCell, {
+      link: row.original.link,
+    }),
  },
  {
   id: "actions",

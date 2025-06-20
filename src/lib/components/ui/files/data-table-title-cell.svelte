@@ -7,7 +7,7 @@
 	const label = $derived(labels.find((label) => label.value === labelValue));
 </script>
 
-<div class="flex space-x-2">
+<div class="flex space-x-2 p-2">
 	{#if label}
 		<Badge variant="outline">{label.label}</Badge>
 	{/if}
