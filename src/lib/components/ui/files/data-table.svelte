@@ -19,7 +19,7 @@
     import type { File } from "$lib/components/ui/files/columns.js";
     import FileBoard from "$lib/components/file-board.svelte";
     import * as Card from "$lib/components/ui/card"
-
+    import PlusIcon from "@lucide/svelte/icons/plus"
     // modal
     import { MediaQuery } from "svelte/reactivity";
     import * as Dialog from "$lib/components/ui/dialog/index.js";
@@ -93,6 +93,7 @@
             <Card.Description>Fail-fail general untuk seluruh pegawai BPS Kabupaten Rokan Hilir</Card.Description>
         </Card.Header>
         <Card.Content>
+            <!-- folder bar -->
             <div class="grid grid-cols-4 gap-4">
                 <div class="rounded-sm">
                     <div class="rounded-sm bg-gray-50 p-2 h-full border-1 border-gray-200">
@@ -114,19 +115,29 @@
                         </Button>
                     </div>
                 </div>
+                <!-- tabel dan lainnya -->
                 <div class="col-span-3">
-                    <div class="flex items-center py-4">
-                        <Input
-                        placeholder="Cari fail..."
-                        value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                        onchange={(e) => {
-                            table.getColumn("name")?.setFilterValue(e.currentTarget.value);
-                        }}
-                        oninput={(e) => {
-                            table.getColumn("name")?.setFilterValue(e.currentTarget.value);
-                        }}
-                        class="max-w-sm"
-                        />
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center py-4 w-full">
+                            <Input
+                            placeholder="Cari fail..."
+                            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+                            onchange={(e) => {
+                                table.getColumn("name")?.setFilterValue(e.currentTarget.value);
+                            }}
+                            oninput={(e) => {
+                                table.getColumn("name")?.setFilterValue(e.currentTarget.value);
+                            }}
+                            class="max-w-sm"
+                            />
+                        </div>
+                        <!-- add button -->
+                        <div class="col-span-1">
+                            <Button>
+                                <PlusIcon />
+                                <span class="hidden sm:inline">Tambah</span>
+                            </Button>
+                        </div>
                     </div>
                     <div class="rounded-md border">
                         <Table.Root>

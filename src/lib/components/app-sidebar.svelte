@@ -96,19 +96,31 @@
 				icon: DataIcon,
 				items: [
 					{
-						title: "General",
+						title: "Kependudukan",
 						url: "#",
 					},
 					{
-						title: "Team",
+						title: "Kesehatan",
 						url: "#",
 					},
 					{
-						title: "Billing",
+						title: "Ketenagakerjaan",
 						url: "#",
 					},
 					{
-						title: "Limits",
+						title: "Kemiskinan",
+						url: "#",
+					},
+					{
+						title: "Pendidikan",
+						url: "#",
+					},
+					{
+						title: "Pembangunan Manusia",
+						url: "#",
+					},
+					{
+						title: "Perekonomian",
 						url: "#",
 					},
 				],
