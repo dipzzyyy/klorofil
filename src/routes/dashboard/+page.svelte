@@ -9,11 +9,16 @@
   
   import DataTable from "$lib/components/ui/files/data-table.svelte";
   import { columns } from "$lib/components/ui/files/columns.js";
+  import type { File } from "$lib/components/ui/files/columns.ts";
   
   let props = $props();
+  const formData = props.form;
   const data = props.data.data;
+  const allData = props.data;
+  // janlupa delete this :
   console.log("Data: ", data)  
   console.log("loaded data: ", data);
+  console.log("form data: ", formData);
 
   console.log("typeof data:", typeof data);
   console.log("Array.isArray(data):", Array.isArray(data));
@@ -56,7 +61,7 @@
       <!-- file board always below -->
       <div class="w-full max-w-screen-xl mx-auto">
         <div class="bg-muted/50 rounded-xl p-4 sm:p-6 md:p-8">
-          <DataTable data={data} columns={columns} />
+          <DataTable allData={allData} columns={columns} />
         </div>
       </div>
     </div>

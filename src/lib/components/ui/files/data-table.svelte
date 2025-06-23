@@ -23,13 +23,21 @@
     // modal
     import { MediaQuery } from "svelte/reactivity";
     import DataTableFacetedFilter from "$lib/components/ui/files/data-table-faceted-filter.svelte";
+    // form
+    import type { SuperValidated, Infer } from "sveltekit-superforms";
+    import { type FileSchema } from "$lib/schemas/files-schema.js";
+    import AddButton from "$lib/components/ui/files/data-table-add-button.svelte";
 
     type DataTableProps<TData, TValue> = {
-        data: TData[];
+        allData: {
+            data: TData[];
+            form: SuperValidated<Infer<FileSchema>>;
+        }
         columns: ColumnDef<TData, TValue>[];
     };
     
-    let { data, columns}: DataTableProps<TData, TValue> = $props();    
+    let { allData, columns }: DataTableProps<TData, TValue> = $props();
+    const { data, form } = allData;
     
     let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
     let sorting = $state<SortingState>([]);
@@ -138,10 +146,7 @@
                         </div>
                         <!-- add button -->
                         <div class="col-span-1">
-                            <Button>
-                                <PlusIcon />
-                                <span class="hidden sm:inline">Tambah</span>
-                            </Button>
+                            <AddButton form={form} />
                         </div>
                     </div>
                     <div class="rounded-md border">
