@@ -34,11 +34,6 @@
 				<Dialog.Title>Tambahkan fail baru</Dialog.Title>
 			</Dialog.Header>
 			<div class="space-y-3 p-1">
-                <!-- select type -->
-                <div>
-                    <Badge variant="outline">Fail</Badge>
-                    <Badge variant="outline">Pengumuman</Badge>
-                </div>
                 <!-- form -->
                 <FileForm dataForm={form} onSuccess={handleClose} />
 			</div>
@@ -48,14 +43,16 @@
 	<Drawer.Root bind:open>
 		<Drawer.Content>
 			<Drawer.Header>
-				<Drawer.Title>sq</Drawer.Title>
+				<Drawer.Title>Tambahkan fail baru</Drawer.Title>
 			</Drawer.Header>
 			<div class="mt-4 px-4 space-y-2">
-				<!-- havent done -->
-				<div class="flex justify-end gap-2 pt-4 pb-6">
-					<Button variant="outline" onclick={() => (open = false)}>Tutup</Button>
-					<Button variant="default">Sunting</Button>
-				</div>
+                <!-- select type -->
+                <div>
+                    <Badge variant="outline">Fail</Badge>
+                    <Badge variant="outline">Pengumuman</Badge>
+                </div>
+                <!-- form -->
+                <FileForm dataForm={form} onSuccess={handleClose} />
 			</div>
 		</Drawer.Content>
 	</Drawer.Root>
