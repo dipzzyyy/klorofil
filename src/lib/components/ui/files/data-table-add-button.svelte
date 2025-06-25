@@ -45,12 +45,7 @@
 			<Drawer.Header>
 				<Drawer.Title>Tambahkan fail baru</Drawer.Title>
 			</Drawer.Header>
-			<div class="mt-4 px-4 space-y-2">
-                <!-- select type -->
-                <div>
-                    <Badge variant="outline">Fail</Badge>
-                    <Badge variant="outline">Pengumuman</Badge>
-                </div>
+			<div class="mt-4 px-4 space-y-2 overflow-y-auto flex-1 mb-5">
                 <!-- form -->
                 <FileForm dataForm={form} onSuccess={handleClose} />
 			</div>
