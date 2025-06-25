@@ -41,18 +41,15 @@
 	</Dialog.Root>
 {:else}
 	<Drawer.Root bind:open>
-		<Drawer.Content>
-			<Drawer.Header>
+		<Drawer.Overlay class="fixed inset-0 bg-black/40" />
+		<Drawer.Content class="fixed bottom-0 left-0 right-0 flex max-h-[96%] flex-col rounded-t-[10px] bg-white">
+			<Drawer.Header class="shrink-0">
 				<Drawer.Title>Tambahkan fail baru</Drawer.Title>
 			</Drawer.Header>
-			<div class="mt-4 px-4 space-y-2">
-                <!-- select type -->
-                <div>
-                    <Badge variant="outline">Fail</Badge>
-                    <Badge variant="outline">Pengumuman</Badge>
-                </div>
+			<div class="px-4 space-y-2 overflow-y-auto flex-1 mb-5">
                 <!-- form -->
                 <FileForm dataForm={form} onSuccess={handleClose} />
+				<div></div>
 			</div>
 		</Drawer.Content>
 	</Drawer.Root>

@@ -16,7 +16,7 @@
   const data = props.data.data;
   const allData = props.data;
   // janlupa delete this :
-  console.log("Data: ", data)  
+  console.log("Data: ", props)  
   console.log("loaded data: ", data);
   console.log("form data: ", formData);
 

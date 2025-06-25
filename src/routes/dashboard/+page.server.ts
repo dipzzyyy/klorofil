@@ -3,6 +3,8 @@ import { fail } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
 import { fileSchema } from "$lib/schemas/files-schema.js";
 import { zod } from "sveltekit-superforms/adapters"
+// connect to database
+import { supabase } from "$lib/server/supabaseClient";
 
 export const load: PageServerLoad = async () => {
 	const form = await superValidate(zod(fileSchema));

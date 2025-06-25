@@ -18,27 +18,43 @@
     import { zodClient } from "sveltekit-superforms/adapters";
     import { toast } from "svelte-sonner";
     
+    // on success untuk nutup dialog
     let { dataForm, onSuccess }: { 
         dataForm: SuperValidated<Infer<FileSchema>>;
         onSuccess?: () => void;
     } = $props();
 
-
+    
     const form = superForm(dataForm, {
         validators: zodClient(fileSchema),
         SPA: true,
-        onUpdate: ({ form: f }) => {
-        if (f.valid) {
-            toast.success(`Berhasil menambahkan. ${JSON.stringify(f.data, null, 2)}`);
-            onSuccess?.();
-        } else {
-            toast.error("Gagal menambahkan. Tolong perbaiki isian anda");
-        }
-        },
+        onResult: ({ result }) => {
+            console.log("server result ", result);
+            if (result?.type === "success" && result?.status === 200) {
+                const submittedData = result?.data?.form?.data;
+                // const submittedData = result.submitted;
+                if (submittedData) {
+                    console.log("✅ submitted to supa", submittedData);
+                    toast.success("Data berhasil ditambahkan!");
+                    onSuccess?.();
+                } else {
+                    toast.error("Gagal menambahkan data.");
+                }
+            } else {
+                toast.error("Gagal menambahkan data.");
+            }
+
+            // if (submittedData) {
+            //     console.log("submitted to supa ", submittedData)
+            //     // toast.success(`Berhasil menambahkan. ${JSON.stringify(f.data, null, 2)}`);
+            //     // onSuccess?.();
+            // } else {
+            //     toast.error("Gagal menambahkan. Tolong perbaiki isian anda");
+            // }
+            },
     });
     
-    const { form: formData, enhance } = form;
-
+    const { form: formData, enhance, message } = form;
     // for type toggle
 	let filePressed = $state(true);
 	let announcementPressed = $state(false);
@@ -54,15 +70,23 @@
 			$formData.type = undefined;
 		}
 	}
+
 </script>
     
-<form method="POST" use:enhance class="space-y-6">
+<form 
+    method="POST" 
+    use:enhance
+    class="space-y-6">
     <!-- Type Toggle -->
 	<Form.Field {form} name="type">
 		<Form.Control>
 			{#snippet children({ props })}
-            <Form.Label>Jenis Fail*</Form.Label>
-                <div class="flex gap-2 mt-2">
+            <div class="w-full inline-flex gap-2 content-between">
+                <div>
+                    <Form.Label>Jenis Fail*</Form.Label>
+                    <Form.Description>Pilih setidaknya satu jenis fail</Form.Description>
+                </div>
+                <div class="">
                     <Toggle
                         {...props}
                         pressed={filePressed}
@@ -72,7 +96,7 @@
                         }}
                         variant="outline"
                     >
-                        File
+                        Fail
                     </Toggle>
                     <Toggle
                         {...props}
@@ -85,13 +109,14 @@
                     >
                         Pengumuman
                     </Toggle>
-                    <pre class="text-xs text-muted-foreground">
+                    <!-- debug -->
+                    <!-- <pre class="text-xs text-muted-foreground">
                         Form type: {$formData.type}
-                    </pre>
+                    </pre> -->
                 </div>
+            </div>
 			{/snippet}
 		</Form.Control>
-		<Form.Description>Pilih setidaknya satu jenis fail</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
     <!-- judul -->
@@ -144,5 +169,5 @@
         <Form.FieldErrors />
     </Form.Field>
 
-    <Form.Button>Submit</Form.Button>
+    <Form.Button type="submit">Submit</Form.Button>
 </form>

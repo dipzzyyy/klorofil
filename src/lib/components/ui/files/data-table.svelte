@@ -38,7 +38,7 @@
     
     let { allData, columns }: DataTableProps<TData, TValue> = $props();
     const { data, form } = allData;
-    
+
     let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
     let sorting = $state<SortingState>([]);
     let columnFilters = $state<ColumnFiltersState>([]);
