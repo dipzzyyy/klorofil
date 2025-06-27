@@ -26,10 +26,9 @@
 
     const form = superForm(dataForm, {
         validators: zodClient(fileSchema),
-        SPA: true,
-        onUpdate: ({ form: f }) => {
-        if (f.valid) {
-            toast.success(`Berhasil menambahkan. ${JSON.stringify(f.data, null, 2)}`);
+        onResult: ({ result: f }) => {
+        if (f.status == 200) {
+            toast.success(`Berhasil menambahkan.`);
             onSuccess?.();
         } else {
             toast.error("Gagal menambahkan. Tolong perbaiki isian anda");
@@ -44,25 +43,32 @@
 	let announcementPressed = $state(false);
 
 	function updateType() {
-		if (filePressed && announcementPressed) {
-			$formData.type = "both";
-		} else if (filePressed) {
-			$formData.type = "fail";
-		} else if (announcementPressed) {
-			$formData.type = "pengumuman";
-		} else {
-			$formData.type = undefined;
-		}
-	}
+        if (!filePressed && !announcementPressed) {
+            filePressed = true;
+            $formData.type = "fail";
+        } else {
+            $formData.type =
+                filePressed && announcementPressed
+                    ? "both"
+                    : filePressed
+                    ? "fail"
+                    : "pengumuman";
+        }
+    }
 </script>
     
 <form method="POST" use:enhance class="space-y-6">
     <!-- Type Toggle -->
 	<Form.Field {form} name="type">
-		<Form.Control>
-			{#snippet children({ props })}
-            <Form.Label>Jenis Fail*</Form.Label>
-                <div class="flex gap-2 mt-2">
+        <Form.Control>
+            {#snippet children({ props })}
+            <div class="w-full inline-flex gap-2 content-between">
+                <div>
+                    <Form.Label>Jenis Fail*</Form.Label>
+                    <Form.Description>Pilih setidaknya satu jenis fail</Form.Description>
+                </div>
+                <div>
+                    <input type="hidden" name="type" value={$formData.type ?? ''}/>
                     <Toggle
                         {...props}
                         pressed={filePressed}
@@ -85,13 +91,10 @@
                     >
                         Pengumuman
                     </Toggle>
-                    <pre class="text-xs text-muted-foreground">
-                        Form type: {$formData.type}
-                    </pre>
+                </div>
                 </div>
 			{/snippet}
 		</Form.Control>
-		<Form.Description>Pilih setidaknya satu jenis fail</Form.Description>
 		<Form.FieldErrors />
 	</Form.Field>
     <!-- judul -->
@@ -130,8 +133,9 @@
         <Form.Control>
             {#snippet children({ props })}
             <div class="inline-flex items-center space-x-2">
+                <input type="hidden" name="importance" value={$formData.importance ?? 'false'}>
                 <Form.Label>Penting?</Form.Label>
-                <Switch {...props} 
+                <Switch
                     checked={$formData.importance === "true"}
                     onCheckedChange={(value) => {
                         $formData.importance = value ? "true" : "false";
@@ -144,5 +148,5 @@
         <Form.FieldErrors />
     </Form.Field>
 
-    <Form.Button>Submit</Form.Button>
+    <Form.Button type="submit">Submit</Form.Button>
 </form>
