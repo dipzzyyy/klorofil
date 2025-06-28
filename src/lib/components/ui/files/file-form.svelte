@@ -17,6 +17,7 @@
     } from "sveltekit-superforms";
     import { zodClient } from "sveltekit-superforms/adapters";
     import { toast } from "svelte-sonner";
+    import { invalidate, invalidateAll } from '$app/navigation';
     
     let { dataForm, onSuccess }: { 
         dataForm: SuperValidated<Infer<FileSchema>>;
@@ -26,9 +27,11 @@
 
     const form = superForm(dataForm, {
         validators: zodClient(fileSchema),
-        onResult: ({ result: f }) => {
+        onResult: async ({ result: f }) => {
         if (f.status == 200) {
             toast.success(`Berhasil menambahkan.`);
+            // refresh page
+            await invalidateAll();
             onSuccess?.();
         } else {
             toast.error("Gagal menambahkan. Tolong perbaiki isian anda");
@@ -111,7 +114,7 @@
     <Form.Field {form} name="description">
         <Form.Control>
             {#snippet children({ props })}
-            <Form.Label>Deskripsi*</Form.Label>
+            <Form.Label>Deskripsi</Form.Label>
             <Input {...props} bind:value={$formData.description} placeholder="Deskripsi fail" />
             {/snippet}
         </Form.Control>

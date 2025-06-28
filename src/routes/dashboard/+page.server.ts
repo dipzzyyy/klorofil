@@ -3,39 +3,19 @@ import { fail } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
 import { fileSchema } from "$lib/schemas/files-schema.js";
 import { zod } from "sveltekit-superforms/adapters"
+import { supabase } from "$lib/server/supabaseConfig.js";
 
 export const load: PageServerLoad = async () => {
 	const form = await superValidate(zod(fileSchema));
-	const data = [
-		{
-		  id: "1",
-		  name: "Undangan Internalisasi Nilai BerAKHLAK Provinsi",
-		  description: "Fail-fail umum untuk seluruh pegawai BPS Kabupaten Rokan Hilir",
-		  label: "Umum",
-		  link: "https://www.figma.com/design/e9gjRGa0gmFh45q4WQoDrl/Klorofil?node-id=0-1&p=f&t=T1IDB3793qnEKTNQ-0",
-		  date: new Date().toISOString(), // serialize
-		  importance: "false",
-		},
-		{
-		  id: "2",
-		  name: "Memo Dinas Internalisasi Nilai BerAKHLAK",
-		  description: "Fail-fail khusus untuk pegawai BPS Kabupaten Rokan Hilir",
-		  label: "Khusus",
-		  link: "https://drive.google.com/drive/folders/1zucZibvqZRcaK4jcqWBFaF8JnGQxwjna?usp=drive_link",
-		  date: new Date().toISOString(),
-		  importance: "false",
-		},
-		{
-		  id: "3",
-		  name: "Undangan Coaching Pilar 6 Zona Integritas",
-		  description: "Pengumuman terbaru di BPS Kabupaten Rokan Hilir",
-		  label: "Pengumuman",
-		  link: "/files/pengumuman",
-		  date: new Date().toISOString(),
-		  importance: "true",
-		},
-	  ];
+	// read from db
+	const { data, error } = await supabase.from('files').select().order('id', { ascending: true });;
 
+	// if db error
+	if (error) {
+		console.error("Supabase error", error);
+		return fail(500, { form: await superValidate(zod(fileSchema)) });
+	}
+	
 	return { 
 		form,
 		data
@@ -44,14 +24,37 @@ export const load: PageServerLoad = async () => {
 
 export const actions: Actions = {
 	default: async (event) => {
-	  const form = await superValidate(event, zod(fileSchema));
-	  if (!form.valid) {
-		return fail(400, {
-		  form,
-		});
-	  }
-	  return {
-		form,
-	  };
+	  	const form = await superValidate(event, zod(fileSchema));
+	//   client checking
+		if (!form.valid) {
+			return fail(400, {
+			form,
+			});
+		}
+	// inserting thru db
+		const { error } = await supabase
+			.from('files')
+			.insert({
+				name: form.data.name,
+				description: form.data.description,
+				label: form.data.label,
+				type: form.data.type,
+				link: form.data.link,
+				importance: form.data.importance
+			})
+			.select();
+
+	// and if it doesnt insert
+	    if (error) {
+			console.error('Supabase insert error', error);
+			return fail(500, {
+				form,
+				message: 'Gagal menyimpan ke database: ' + error.message
+			});
+    	}
+
+		return {
+			form,
+		};
 	},
   };
