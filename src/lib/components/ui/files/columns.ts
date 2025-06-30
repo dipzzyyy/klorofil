@@ -19,6 +19,7 @@ export type File = {
   link: string;
   date: Date;
   importance: string;
+  type: string;
 };
  
 export const columns: ColumnDef<File>[] = [
@@ -78,9 +79,7 @@ export const columns: ColumnDef<File>[] = [
   cell: ({ row }) => {
     // You can pass whatever you need from `row.original` to the component
         return renderComponent(DataTableActions, 
-          { id: row.original.id,
-            link: row.original.link,
-            importance: row.original.importance,
+          { file: row.original
           }
         );
         // return renderComponent(DataTableActions<File>, { row });

@@ -4,6 +4,9 @@ import { superValidate } from "sveltekit-superforms";
 import { fileSchema } from "$lib/schemas/files-schema.js";
 import { zod } from "sveltekit-superforms/adapters"
 import { supabase } from "$lib/server/supabaseConfig.js";
+import type { Action } from "$lib/components/ui/card/index.js";
+// val for update
+import { z } from "zod";
 
 export const load: PageServerLoad = async () => {
 	const form = await superValidate(zod(fileSchema));
@@ -23,15 +26,15 @@ export const load: PageServerLoad = async () => {
 };
 
 export const actions: Actions = {
-	default: async (event) => {
-	  	const form = await superValidate(event, zod(fileSchema));
-	//   client checking
+	create: async (event) => {
+		const form = await superValidate(event, zod(fileSchema));
+		//   client checking
 		if (!form.valid) {
 			return fail(400, {
 			form,
 			});
 		}
-	// inserting thru db
+		// inserting thru db
 		const { error } = await supabase
 			.from('files')
 			.insert({
@@ -44,17 +47,77 @@ export const actions: Actions = {
 			})
 			.select();
 
-	// and if it doesnt insert
-	    if (error) {
-			console.error('Supabase insert error', error);
+		// and if it doesnt insert
+		if (error) {
 			return fail(500, {
 				form,
 				message: 'Gagal menyimpan ke database: ' + error.message
 			});
-    	}
+		}
 
 		return {
 			form,
 		};
 	},
-  };
+	update: async (event) => {
+		const formData = Object.fromEntries(await event.request.formData());
+		// Extend your schema with ID
+		const updateSchema = fileSchema.extend({
+			id: z.coerce.number().min(1, "ID wajib")
+		});
+		const parse = updateSchema.safeParse(formData);
+
+		if (!parse.success) {
+			console.error("Validation errors", parse.error.flatten());
+			return fail(400, {
+				message: "Data tidak valid",
+				errors: parse.error.flatten()
+			});
+		}
+
+		const data = parse.data;
+
+		const { data:updated, error } = await supabase
+			.from("files")
+			.update({
+				name: data.name,
+				description: data.description,
+				label: data.label,
+				type: data.type,
+				link: data.link,
+				importance: data.importance,
+				updated_at: new Date().toISOString()
+			})
+			.eq("id", data.id);
+		
+		if (error) {
+			return fail(500, {
+				message: "Gagal update: " + error.message
+			});
+		}
+
+		return {
+			success: true
+		};
+	},
+	delete: async (event) => {
+		const formData = Object.fromEntries(await event.request.formData());
+		const id = Number(formData.id);
+
+		if (!id || isNaN(id)) {
+			return fail(400, { message: "ID tidak valid untuk hapus." });
+		}
+
+		const { error } = await supabase
+			.from("files")
+			.delete()
+			.eq("id", id);
+
+		if (error) {
+			console.error("Supabase delete error", error);
+			return fail(500, { message: "Gagal menghapus: " + error.message });
+		}
+
+		return { success: true };
+	}
+} satisfies Actions;

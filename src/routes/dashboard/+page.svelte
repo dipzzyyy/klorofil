@@ -15,14 +15,6 @@
   const formData = props.form;
   const data = props.data.data;
   const allData = props.data;
-  // janlupa delete this :
-  console.log("Data: ", data)  
-  console.log("loaded data: ", data.data);
-  console.log("form data: ", formData);
-
-  console.log("typeof data:", typeof data);
-  console.log("Array.isArray(data):", Array.isArray(data));
-
 </script>
 
 <Sidebar.Provider>

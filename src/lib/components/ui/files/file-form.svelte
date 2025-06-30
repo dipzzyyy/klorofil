@@ -60,7 +60,7 @@
     }
 </script>
     
-<form method="POST" use:enhance class="space-y-6">
+<form method="POST" use:enhance class="space-y-6" action="?/create">
     <!-- Type Toggle -->
 	<Form.Field {form} name="type">
         <Form.Control>
@@ -151,5 +151,5 @@
         <Form.FieldErrors />
     </Form.Field>
 
-    <Form.Button type="submit">Submit</Form.Button>
+    <Form.Button>Submit</Form.Button>
 </form>
