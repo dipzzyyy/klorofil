@@ -15,7 +15,6 @@ export const load: PageServerLoad = async () => {
 
 	// if db error
 	if (error) {
-		console.error("Supabase error", error);
 		return fail(500, { form: await superValidate(zod(fileSchema)) });
 	}
 	
@@ -68,7 +67,6 @@ export const actions: Actions = {
 		const parse = updateSchema.safeParse(formData);
 
 		if (!parse.success) {
-			console.error("Validation errors", parse.error.flatten());
 			return fail(400, {
 				message: "Data tidak valid",
 				errors: parse.error.flatten()
@@ -114,7 +112,6 @@ export const actions: Actions = {
 			.eq("id", id);
 
 		if (error) {
-			console.error("Supabase delete error", error);
 			return fail(500, { message: "Gagal menghapus: " + error.message });
 		}
 

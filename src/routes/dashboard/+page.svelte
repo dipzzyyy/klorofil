@@ -13,8 +13,6 @@
   
   let props = $props();
   const formData = props.form;
-  const data = props.data.data;
-  const allData = props.data;
 </script>
 
 <Sidebar.Provider>
@@ -53,7 +51,7 @@
       <!-- file board always below -->
       <div class="w-full max-w-screen-xl mx-auto">
         <div class="bg-muted/50 rounded-xl p-4 sm:p-6 md:p-8">
-          <DataTable allData={allData} columns={columns} />
+          <DataTable allData={props.data} columns={columns} />
         </div>
       </div>
     </div>

@@ -45,7 +45,7 @@
     
     const table = createSvelteTable({
         get data() {
-            return data;
+            return allData.data;
         },
         columns,
         getCoreRowModel: getCoreRowModel(),
@@ -146,7 +146,7 @@
                         </div>
                         <!-- add button -->
                         <div class="col-span-1">
-                            <AddButton form={form} />
+                            <AddButton form={allData.form} />
                         </div>
                     </div>
                     <div class="rounded-md border">

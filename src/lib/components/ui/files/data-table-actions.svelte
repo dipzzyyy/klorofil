@@ -53,7 +53,7 @@
                     variant="ghost"
                     size="icon"
                     class="relative size-8 p-0"
-                    on:click={handleLinkClick}
+                    onclick={handleLinkClick}
                 >
                     <LinkIcon />
                     <span class="sr-only">Salin URL</span>
