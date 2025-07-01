@@ -1,4 +1,12 @@
 <script lang="ts" generics="TData, TValue">
+    // buat see all di information board
+    import { onMount } from "svelte"; 
+    onMount(() => {
+        const handler = () => applyFilter({ type: "pengumuman" });
+        window.addEventListener("applyPengumuman", handler);
+        return () => window.removeEventListener("applyPengumuman", handler);
+    });
+
     import {
         type ColumnDef,
         type PaginationState,
@@ -121,6 +129,18 @@
             <div class="grid grid-cols-4 gap-4">
                 <div class="rounded-sm">
                     <div class="rounded-sm bg-gray-50 p-2 h-full border-1 border-gray-200">
+                        <Button
+                            class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
+                            variant={
+                                !table.getColumn("label")?.getFilterValue() &&
+                                !table.getColumn("type")?.getFilterValue()
+                                ? "secondary"
+                                : "ghost"
+                            }
+                            onclick={() => applyFilter({})}
+                        >
+                            Semua Fail
+                        </Button>
                         {#each uniqueLabels as label}
                             <Button
                                 class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
@@ -134,6 +154,18 @@
                         <Button
                             class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
                             variant={
+                                table.getColumn("label")?.getFilterValue() === "administrasi"
+                                ? "secondary"
+                                : "ghost"
+                            }
+                            onclick={() => applyFilter({ label:"administrasi" })}
+                        >
+                            Administrasi
+                        </Button>
+
+                        <Button
+                            class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
+                            variant={
                                 table.getColumn("type")?.getFilterValue() === "pengumuman"
                                 ? "secondary"
                                 : "ghost"
@@ -141,19 +173,6 @@
                             onclick={() => applyFilter({ type: "pengumuman" })}
                         >
                             Pengumuman
-                        </Button>
-
-                        <Button
-                            class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
-                            variant={
-                                !table.getColumn("label")?.getFilterValue() &&
-                                !table.getColumn("type")?.getFilterValue()
-                                ? "secondary"
-                                : "ghost"
-                            }
-                            onclick={() => applyFilter({})}
-                        >
-                            Semua Fail
                         </Button>
 
                     </div>

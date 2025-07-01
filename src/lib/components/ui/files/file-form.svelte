@@ -151,5 +151,5 @@
         <Form.FieldErrors />
     </Form.Field>
 
-    <Form.Button>Submit</Form.Button>
+    <Form.Button>Tambahkan</Form.Button>
 </form>

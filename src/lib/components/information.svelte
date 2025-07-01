@@ -11,21 +11,26 @@
 
     let {
         informations,
+        onSeeAll
     }: {
         informations: {
             id: number;
             name: string;
             description: string;
+            type: string;
             importance: string;
             link: string;
         }[];
+        onSeeAll: () => void
     } = $props();
 
     const sortedInformation = $derived.by(() => {
-        return [...informations].sort((a, b) => {
-            if (a.importance === "true" && b.importance !== "true") return -1;
-            if (a.importance !== "true" && b.importance === "true") return 1;
-            return 0;
+        return [...informations]
+            .filter((item) => item.type === "pengumuman" || item.type === "both")    
+            .sort((a, b) => {
+                if (a.importance === "true" && b.importance !== "true") return -1;
+                if (a.importance !== "true" && b.importance === "true") return 1;
+                return 0;
         });
     });
 
@@ -33,9 +38,6 @@
     let selectedInfo = $state(null);
     function openInfo(item) {
         selectedInfo = item;
-    }
-    function closeInfo() {
-        selectedInfo = null;
     }
 	const isDesktop = new MediaQuery("(min-width: 768px)");
 
@@ -46,12 +48,11 @@
         <Card.Title>Informasi Terkini</Card.Title>
         <Card.Description>Pengumuman terbaru di BPS Kabupaten Rokan Hilir</Card.Description>
         <Card.Action class="w-full flex justify-end">
-            <Button>Lihat semua</Button>
+            <Button onclick={onSeeAll}>Lihat semua</Button>
         </Card.Action>
     </Card.Header>
     <ScrollArea class="h-72 w-full rounded-md border p-4 bg-gray-50">
         <div class="grid gap-4">
-            <!-- add perulangan disini -->
             {#each sortedInformation as info (info.id)}
                 <Card.Root>
                     <Card.Header>

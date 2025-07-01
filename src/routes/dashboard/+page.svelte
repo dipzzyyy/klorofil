@@ -6,12 +6,12 @@
   import CalendarEvent from "$lib/components/calendar-31.svelte"
   import InformationBoard from "$lib/components/information.svelte"
   import FileBoard from "$lib/components/file-board.svelte"
-  
   import DataTable from "$lib/components/ui/files/data-table.svelte";
   import { columns } from "$lib/components/ui/files/columns.js";
   import type { File } from "$lib/components/ui/files/columns.ts";
   
   let props = $props();
+  let informationRef: HTMLDivElement;
 </script>
 
 <Sidebar.Provider>
@@ -42,14 +42,25 @@
         <!-- info board -->
         <div class="w-full min-w-0">
           <div class="rounded-xl w-full h-full p-4 sm:p-6 md:p-8 bg-white shadow min-w-2xs">
-            <InformationBoard informations={props.data.data}/>
+            <InformationBoard 
+              informations={props.data.data}
+              onSeeAll={() => {
+                informationRef.scrollIntoView({ behavior: "smooth" });
+                // Delay slightly to ensure scroll has started before applying filter
+                setTimeout(() => {
+                  // You can expose applyFilter via context or event, or trigger a custom event
+                  const evt = new CustomEvent("applyPengumuman");
+                  window.dispatchEvent(evt);
+                }, 300);
+              }}
+              />
           </div>
         </div>
       </div>
     
       <!-- file board always below -->
       <div class="w-full max-w-screen-xl mx-auto">
-        <div class="bg-muted/50 rounded-xl p-4 sm:p-6 md:p-8">
+        <div class="bg-muted/50 rounded-xl p-4 sm:p-6 md:p-8" bind:this ={informationRef}>
           <DataTable allData={props.data} columns={columns} />
         </div>
       </div>
