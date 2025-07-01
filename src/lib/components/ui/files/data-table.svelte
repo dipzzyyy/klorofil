@@ -37,7 +37,6 @@
     };
     
     let { allData, columns }: DataTableProps<TData, TValue> = $props();
-    const { data, form } = allData;
     
     let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
     let sorting = $state<SortingState>([]);
@@ -87,6 +86,28 @@
         },
     });
 
+    // filtering category (get label)
+    const uniqueLabels = $derived.by(() => {
+        const labels = new Set<string>();
+        for (const item of allData.data) {
+            if (item.label) labels.add(item.label);
+        }
+        return Array.from(labels);
+    });
+
+    // more function to filter category
+    function applyFilter({
+        label = undefined,
+        type = undefined
+    }: {
+        label?: string | undefined;
+        type?: string | undefined;
+    }) {
+        table.getColumn("label")?.setFilterValue(label);
+        table.getColumn("type")?.setFilterValue(type);
+    }
+
+
 </script>
 
 <div>
@@ -100,22 +121,41 @@
             <div class="grid grid-cols-4 gap-4">
                 <div class="rounded-sm">
                     <div class="rounded-sm bg-gray-50 p-2 h-full border-1 border-gray-200">
-                        <!-- add perulangan disini -->
-                        <Button 
-                        class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
-                        variant="ghost">
-                            Fail Umum
-                        </Button>
-                        <Button 
-                        class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
-                        variant="ghost">
-                            Fail Khusus
-                        </Button>
-                        <Button 
-                        class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
-                        variant="ghost">
+                        {#each uniqueLabels as label}
+                            <Button
+                                class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
+                                variant={table.getColumn("label")?.getFilterValue() === label ? "secondary" : "ghost"}
+                                onclick={() => applyFilter({ label })}
+                            >
+                                {label}
+                            </Button>
+                        {/each}
+
+                        <Button
+                            class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
+                            variant={
+                                table.getColumn("type")?.getFilterValue() === "pengumuman"
+                                ? "secondary"
+                                : "ghost"
+                            }
+                            onclick={() => applyFilter({ type: "pengumuman" })}
+                        >
                             Pengumuman
                         </Button>
+
+                        <Button
+                            class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
+                            variant={
+                                !table.getColumn("label")?.getFilterValue() &&
+                                !table.getColumn("type")?.getFilterValue()
+                                ? "secondary"
+                                : "ghost"
+                            }
+                            onclick={() => applyFilter({})}
+                        >
+                            Semua Fail
+                        </Button>
+
                     </div>
                 </div>
                 <!-- tabel dan lainnya -->
@@ -123,15 +163,15 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center py-4 w-full">
                             <Input
-                            placeholder="Cari fail..."
-                            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                            onchange={(e) => {
-                                table.getColumn("name")?.setFilterValue(e.currentTarget.value);
-                            }}
-                            oninput={(e) => {
-                                table.getColumn("name")?.setFilterValue(e.currentTarget.value);
-                            }}
-                            class="max-w-sm"
+                                placeholder="Cari fail..."
+                                value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+                                onchange={(e) => {
+                                    table.getColumn("name")?.setFilterValue(e.currentTarget.value);
+                                }}
+                                oninput={(e) => {
+                                    table.getColumn("name")?.setFilterValue(e.currentTarget.value);
+                                }}
+                                class="max-w-sm"
                             />
                         </div>
                         <div class="m-3">

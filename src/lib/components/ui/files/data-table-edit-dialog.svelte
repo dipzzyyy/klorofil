@@ -120,72 +120,74 @@
         <Drawer.Header>
             <Drawer.Title>Edit Fail</Drawer.Title>
         </Drawer.Header>
-
-        <form method="POST" use:enhance={() => {
-            return async ({ result, update, }) => {
-                if (result.type === 'success') {
-                    await update();
-                    toast.success(`Berhasil menambahkan.`);
-                    open = false;
-                    await invalidateAll();
-                } else if (result.type === "failure") {
-                    toast.error("Gagal memperbarui");
-                    if (result.data?.errors) {
-                        fieldErrors = result.data.errors.fieldErrors || {};
-                    } else {
-                        fieldErrors = {};
+        <div class="gap-2 p-5 overflow-y-auto">
+            <form method="POST" use:enhance={() => {
+                return async ({ result, update, }) => {
+                    if (result.type === 'success') {
+                        await update();
+                        toast.success(`Berhasil menambahkan.`);
+                        open = false;
+                        await invalidateAll();
+                    } else if (result.type === "failure") {
+                        toast.error("Gagal memperbarui");
+                        if (result.data?.errors) {
+                            fieldErrors = result.data.errors.fieldErrors || {};
+                        } else {
+                            fieldErrors = {};
+                        }
                     }
                 }
-            }
-        }} 
-        class="space-y-4" action="?/update">
-            <input type="hidden" name="id" value={fileData.id}/>
-            <div class="flex flex-col">
-                <div class="flex items-center justify-between">
-                    <label for="type" class="font-semibold">Tipe fail</label>
-                    <div class="flex gap-2">
-                        <input type="hidden" name="type" value={type}/>
-                        <Toggle pressed={filePressed} onPressedChange={(v) => { filePressed = v; updateType(); }}>File</Toggle>
-                        <Toggle pressed={announcementPressed} onPressedChange={(v) => { announcementPressed = v; updateType(); }}>Pengumuman</Toggle>
+            }} 
+            class="space-y-4" action="?/update">
+                <input type="hidden" name="id" value={fileData.id}/>
+                <div class="flex flex-col">
+                    <div class="flex items-center justify-between">
+                        <label for="type" class="font-semibold">Tipe fail</label>
+                        <div class="flex gap-2">
+                            <input type="hidden" name="type" value={type}/>
+                            <Toggle pressed={filePressed} onPressedChange={(v) => { filePressed = v; updateType(); }}>File</Toggle>
+                            <Toggle pressed={announcementPressed} onPressedChange={(v) => { announcementPressed = v; updateType(); }}>Pengumuman</Toggle>
+                        </div>
                     </div>
+                    <label for="type" class="text-sm text-gray-600">Pilih salah satu</label>
+                        {#if fieldErrors?.type?.length}
+                            <p class="text-red-500 text-sm">{fieldErrors.type}</p>
+                        {/if}
                 </div>
-                <label for="type" class="text-sm text-gray-600">Pilih salah satu</label>
-                    {#if fieldErrors?.type?.length}
-                        <p class="text-red-500 text-sm">{fieldErrors.type}</p>
+    
+                <div>
+                    <label for="name" class="font-semibold">Judul*</label>
+                    <Input name="name" bind:value={name} placeholder="Masukkan judul" />
+                    {#if fieldErrors?.name?.length}
+                        <p class="text-red-500 text-sm">{fieldErrors.name}</p>
                     {/if}
-            </div>
+                </div>
+    
+                <div>
+                    <label for="description" class="font-semibold">Deskripsi</label>
+                    <Input name="description" bind:value={description} placeholder="Masukkan deskripsi" />
+                </div>
+    
+                <div>
+                    <label for="link" class="font-semibold">Tautan*</label>
+                    <Input name="link" bind:value={link} placeholder="Masukkan tautan URL" />
+                    {#if fieldErrors?.link?.length}
+                        <p class="text-red-500 text-sm">{fieldErrors.link}</p>
+                    {/if}
+                </div>
+    
+                <div class="flex items-center space-x-2">
+                    <label for="importance" class="font-semibold">Penting?</label>
+                    <input type="hidden" name="importance" value={importance ? 'true' : 'false'} />
+                    <Switch checked={importance} onCheckedChange={(v) => importance = v} />
+                </div>
+    
+                <div class="flex justify-end gap-2">
+                    <Button variant="default" type="submit">Perbarui</Button>
+                </div>
+            </form>
+        </div>
 
-            <div>
-                <label for="name" class="font-semibold">Judul*</label>
-                <Input name="name" bind:value={name} placeholder="Masukkan judul" />
-                {#if fieldErrors?.name?.length}
-                    <p class="text-red-500 text-sm">{fieldErrors.name}</p>
-                {/if}
-            </div>
-
-            <div>
-                <label for="description" class="font-semibold">Deskripsi</label>
-                <Input name="description" bind:value={description} placeholder="Masukkan deskripsi" />
-            </div>
-
-            <div>
-                <label for="link" class="font-semibold">Tautan*</label>
-                <Input name="link" bind:value={link} placeholder="Masukkan tautan URL" />
-                {#if fieldErrors?.link?.length}
-                    <p class="text-red-500 text-sm">{fieldErrors.link}</p>
-                {/if}
-            </div>
-
-            <div class="flex items-center space-x-2">
-                <label for="importance" class="font-semibold">Penting?</label>
-                <input type="hidden" name="importance" value={importance ? 'true' : 'false'} />
-                <Switch checked={importance} onCheckedChange={(v) => importance = v} />
-            </div>
-
-            <div class="flex justify-end gap-2">
-                <Button variant="default" type="submit">Perbarui</Button>
-            </div>
-        </form>
     </Drawer.Content>
 </Drawer.Root>
 {/if}

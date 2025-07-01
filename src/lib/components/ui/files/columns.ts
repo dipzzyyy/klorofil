@@ -73,16 +73,35 @@ export const columns: ColumnDef<File>[] = [
   filterFn: (row, id, value: string[]) => {
     return value.includes(row.getValue(id) as string);
   },
-},
- {
-  id: "actions",
-  cell: ({ row }) => {
-    // You can pass whatever you need from `row.original` to the component
-        return renderComponent(DataTableActions, 
-          { file: row.original
-          }
-        );
-        // return renderComponent(DataTableActions<File>, { row });
-    },
- },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      // You can pass whatever you need from `row.original` to the component
+          return renderComponent(DataTableActions, 
+            { file: row.original
+            }
+          );
+          // return renderComponent(DataTableActions<File>, { row });
+      },
+  },
+  {
+    id: "label",
+    accessorFn: (row) => row.label,
+    header: () => null,
+    cell: () => null, 
+  },
+  {
+    id: "type",
+    accessorFn: (row) => row.type,
+    header: () => null,
+    cell: () => null, 
+    filterFn: (row, columnId, filterValue) => {
+      const value = row.getValue(columnId);
+      if (filterValue === "pengumuman") {
+        return value === "pengumuman" || value === "both";
+      }
+      return value === filterValue;
+    }
+  },
 ];

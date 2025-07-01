@@ -4,7 +4,7 @@
   import { Separator } from "$lib/components/ui/separator/index.js";
   import * as Sidebar from "$lib/components/ui/sidebar/index.js";
   import CalendarEvent from "$lib/components/calendar-31.svelte"
-  import InformationBoard from "$lib/components/app-information.svelte"
+  import InformationBoard from "$lib/components/information.svelte"
   import FileBoard from "$lib/components/file-board.svelte"
   
   import DataTable from "$lib/components/ui/files/data-table.svelte";
@@ -12,7 +12,6 @@
   import type { File } from "$lib/components/ui/files/columns.ts";
   
   let props = $props();
-  const formData = props.form;
 </script>
 
 <Sidebar.Provider>
@@ -43,7 +42,7 @@
         <!-- info board -->
         <div class="w-full min-w-0">
           <div class="rounded-xl w-full h-full p-4 sm:p-6 md:p-8 bg-white shadow min-w-2xs">
-            <InformationBoard />
+            <InformationBoard informations={props.data.data}/>
           </div>
         </div>
       </div>
