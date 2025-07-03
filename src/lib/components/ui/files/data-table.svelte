@@ -35,6 +35,7 @@
     import type { SuperValidated, Infer } from "sveltekit-superforms";
     import { type FileSchema } from "$lib/schemas/files-schema.js";
     import AddButton from "$lib/components/ui/files/data-table-add-button.svelte";
+    import DataTableActions from "$lib/components/ui/files/data-table-actions.svelte";
 
     type DataTableProps<TData, TValue> = {
         allData: {
@@ -49,6 +50,15 @@
     let pagination = $state<PaginationState>({ pageIndex: 0, pageSize: 10 });
     let sorting = $state<SortingState>([]);
     let columnFilters = $state<ColumnFiltersState>([]);
+    
+    // filtering category (get label)
+    const uniqueLabels = $derived.by(() => {
+        const labels = new Set<string>();
+        for (const item of allData.data) {
+            if (item.label) labels.add(item.label);
+        }
+        return Array.from(labels);
+    });
     
     const table = createSvelteTable({
         get data() {
@@ -92,15 +102,6 @@
             return columnFilters;
         },
         },
-    });
-
-    // filtering category (get label)
-    const uniqueLabels = $derived.by(() => {
-        const labels = new Set<string>();
-        for (const item of allData.data) {
-            if (item.label) labels.add(item.label);
-        }
-        return Array.from(labels);
     });
 
     // more function to filter category
@@ -151,17 +152,19 @@
                             </Button>
                         {/each}
 
-                        <Button
-                            class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
-                            variant={
-                                table.getColumn("label")?.getFilterValue() === "administrasi"
-                                ? "secondary"
-                                : "ghost"
-                            }
-                            onclick={() => applyFilter({ label:"administrasi" })}
-                        >
-                            Administrasi
-                        </Button>
+                        {#if !uniqueLabels.includes("Administrasi")}
+                            <Button
+                                class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
+                                variant={
+                                    table.getColumn("label")?.getFilterValue() === "administrasi"
+                                    ? "secondary"
+                                    : "ghost"
+                                }
+                                onclick={() => applyFilter({ label:"administrasi" })}
+                            >
+                                Administrasi
+                            </Button>
+                        {/if}
 
                         <Button
                             class="w-full justify-start text-gray-900 hover:bg-gray-100 truncate"
@@ -205,7 +208,7 @@
                         </div>
                         <!-- add button -->
                         <div class="col-span-1">
-                            <AddButton form={allData.form} />
+                            <AddButton form={allData.form} labels={uniqueLabels} />
                         </div>
                     </div>
                     <div class="rounded-md border">
@@ -229,14 +232,18 @@
                             <Table.Body>
                                 {#each table.getRowModel().rows as row (row.id)}
                                     <Table.Row data-state={row.getIsSelected() && "selected"}>
-                                        {#each row.getVisibleCells() as cell (cell.id)}
+                                        {#each row.getVisibleCells().filter(cell => cell.column.id !== "label" && cell.column.id !== "type") as cell (cell.id)}
                                             <Table.Cell>
                                                 <FlexRender
                                                 content={cell.column.columnDef.cell}
                                                 context={cell.getContext()}
                                                 />
                                             </Table.Cell>
-                                        {/each}
+                                            <!-- action -->
+                                            {/each}
+                                            <Table.Cell>
+                                                <DataTableActions file={row.original} labels={uniqueLabels} />
+                                            </Table.Cell>
                                     </Table.Row>
                                     {:else}
                                     <Table.Row>

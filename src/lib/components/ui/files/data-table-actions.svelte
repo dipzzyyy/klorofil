@@ -8,12 +8,12 @@
     import FileEditDialog from "$lib/components/ui/files/data-table-edit-dialog.svelte";
     import { invalidateAll } from "$app/navigation";
 
-    let { file } = $props();
+    let { file, labels } = $props();
 
     let editOpen = $state(false);
-    let selectedFile = $state(null);
+    let selectedFile = $state();
 
-    function openEdit(f) {
+    function openEdit(f: File) {
         selectedFile = f;
         editOpen = true;
     }
@@ -104,6 +104,6 @@
     </Tooltip.Provider>
 
     {#if editOpen}
-        <FileEditDialog fileData={selectedFile} bind:open={editOpen} />
+        <FileEditDialog fileData={selectedFile} bind:open={editOpen} labels={labels}/>
     {/if}
 </div>

@@ -5,6 +5,13 @@
 	import Calendar from "$lib/components/ui/calendar/calendar.svelte";
 	import * as Card from "$lib/components/ui/card/index.js";
 	import { CalendarDate, getLocalTimeZone, type DateValue } from "@internationalized/date";
+	import { superValidate } from "sveltekit-superforms/client";
+	import { eventSchema } from "$lib/schemas/event-schema.js";
+    import { enhance } from "$app/forms";
+	import { onMount } from "svelte";
+	// import { Tooltip } from "$lib/components/ui/tooltip"
+
+	let showForm = false;
 
 	const events = [
 		{

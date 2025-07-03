@@ -9,8 +9,9 @@
     import { toast } from "svelte-sonner";
     import { invalidateAll } from "$app/navigation";
     import { enhance } from "$app/forms";
+    import * as Select from "$lib/components/ui/select/index.js";
 
-    let { fileData, open = $bindable() } = $props();
+    let { fileData, open = $bindable(), labels } = $props();
 
     const isDesktop = new MediaQuery("(min-width: 768px)");
 
@@ -18,53 +19,72 @@
     let description = $state(fileData.description);
     let link = $state(fileData.link);
     let type = $state(fileData.type);
+    let label = $state(fileData.label);
     let importance = $state(fileData.importance === "true");
 
     // for type toggle
-	let filePressed = $state(type === "fail" || type === "both");
-	let announcementPressed = $state(type === "pengumuman" || type === "both");
+	let filePressed = $state(fileData.type === "fail" || fileData.type === "both");
+	let announcementPressed = $state(fileData.type === "pengumuman" || fileData.type === "both");
 
     function updateType() {
-        if (!filePressed && !announcementPressed) {
-            filePressed = true;
+        if (filePressed && announcementPressed) {
+            type = "both";
+        } else if (filePressed) {
             type = "fail";
+        } else if (announcementPressed) {
+            type = "pengumuman";
         } else {
-            type = filePressed && announcementPressed
-                ? "both"
-                : filePressed
-                ? "fail"
-                : "pengumuman";
+            // Assign empty string (or any invalid value) so Zod catches it
+            type = "" as any;  // Zod will fail this as it's not in the enum
         }
     }
 
-    let fieldErrors = $state([]);
+    let fieldErrors:Record<string, string[]> = $state({});
+
+    let isAddingCustomLabel = $state(false);
+    let customLabelInput = $state("");
+
+    const extendLabels: string[] = $derived.by(() => {
+        const set = new Set<string>(labels);
+        set.add("Administrasi");
+        return Array.from(set);
+    });
+
+    function handleLabelChange(value: string) {
+        if (value === "__custom__") {
+            isAddingCustomLabel = true;
+            customLabelInput = "";
+            label = "";
+        } else {
+            isAddingCustomLabel = false;
+            label = value;
+        }
+    }
 </script>
 
 {#if isDesktop.current}
 <Dialog.Root bind:open>
     <Dialog.Content>
         <Dialog.Header>
-            <Dialog.Title>Edit Fail</Dialog.Title>
+            <Dialog.Title>Sunting Fail</Dialog.Title>
         </Dialog.Header>
 
         <form method="POST" use:enhance={() => {
             return async ({ result, update, }) => {
                 if (result.type === 'success') {
                     await update();
-                    toast.success(`Berhasil menambahkan.`);
+                    toast.success(`Berhasil memperbarui.`);
                     open = false;
                     await invalidateAll();
                 } else if (result.type === "failure") {
                     toast.error("Gagal memperbarui");
-                    if (result.data?.errors) {
-                        fieldErrors = result.data.errors.fieldErrors || {};
-                    } else {
-                        fieldErrors = {};
-                    }
+                    const errors = result.data?.errors as { fieldErrors?: Record<string, string[]> } | undefined;
+                    fieldErrors = errors?.fieldErrors || {};
                 }
             }
-        }} 
-        class="space-y-4" action="?/update">
+            }} 
+            class="space-y-4" action="?/update"
+        >
             <input type="hidden" name="id" value={fileData.id}/>
             <div class="flex flex-col">
                 <div class="flex items-center justify-between">
@@ -102,6 +122,50 @@
                 {/if}
             </div>
 
+            <div>
+            <label for="label" class="font-semibold">Kategori</label>
+            {#if !isAddingCustomLabel}
+                <Select.Root
+                    type="single"
+                    value={label}
+                    name="label"
+                    onValueChange={handleLabelChange}
+                >
+                    <Select.Trigger class="w-full">
+                        {label || "Pilih atau masukkan label"}
+                    </Select.Trigger>
+                    <Select.Content class="w-full">
+                        {#each extendLabels as l}
+                            <Select.Item value={l} label={l} />
+                        {/each}
+                        <Select.Item value="__custom__" label="Tambah label baru..." />
+                    </Select.Content>
+                </Select.Root>
+            {:else}
+                <div class="space-y-1">
+                    <Input
+                        name="label"
+                        bind:value={customLabelInput}
+                        placeholder="Masukkan label baru"
+                        class="w-full mt-2"
+                    />
+                    <button
+                        type="button"
+                        class="text-sm text-blue-500 hover:underline"
+                        onclick={() => {
+                            isAddingCustomLabel = false;
+                            label = ""; // Optional: reset label or keep value
+                        }}
+                    >
+                        Kembali ke pilihan kategori
+                    </button>
+                </div>
+            {/if}
+            {#if fieldErrors?.label?.length}
+                <p class="text-red-500 text-sm">{fieldErrors.label}</p>
+            {/if}
+        </div>
+
             <div class="flex items-center space-x-2">
                 <label for="importance" class="font-semibold">Penting?</label>
                 <input type="hidden" name="importance" value={importance ? 'true' : 'false'} />
@@ -130,11 +194,8 @@
                         await invalidateAll();
                     } else if (result.type === "failure") {
                         toast.error("Gagal memperbarui");
-                        if (result.data?.errors) {
-                            fieldErrors = result.data.errors.fieldErrors || {};
-                        } else {
-                            fieldErrors = {};
-                        }
+                        const errors = result.data?.errors as { fieldErrors?: Record<string, string[]> } | undefined;
+                        fieldErrors = errors?.fieldErrors || {};
                     }
                 }
             }} 
@@ -175,7 +236,51 @@
                         <p class="text-red-500 text-sm">{fieldErrors.link}</p>
                     {/if}
                 </div>
-    
+
+                <div>
+                    <label for="label" class="font-semibold">Kategori</label>
+                    {#if !isAddingCustomLabel}
+                        <Select.Root
+                            type="single"
+                            value={label}
+                            name="label"
+                            onValueChange={handleLabelChange}
+                        >
+                            <Select.Trigger class="w-full">
+                                {label || "Pilih atau masukkan label"}
+                            </Select.Trigger>
+                            <Select.Content class="w-full">
+                                {#each extendLabels as l}
+                                    <Select.Item value={l} label={l} />
+                                {/each}
+                                <Select.Item value="__custom__" label="Tambah label baru..." />
+                            </Select.Content>
+                        </Select.Root>
+                    {:else}
+                        <div class="space-y-1">
+                            <Input
+                                name="label"
+                                bind:value={customLabelInput}
+                                placeholder="Masukkan label baru"
+                                class="w-full mt-2"
+                            />
+                            <button
+                                type="button"
+                                class="text-sm text-blue-500 hover:underline"
+                                onclick={() => {
+                                    isAddingCustomLabel = false;
+                                    label = ""; // Optional: reset label or keep value
+                                }}
+                            >
+                                Kembali ke pilihan kategori
+                            </button>
+                        </div>
+                    {/if}
+                    {#if fieldErrors?.label?.length}
+                        <p class="text-red-500 text-sm">{fieldErrors.label}</p>
+                    {/if}
+                </div>
+            
                 <div class="flex items-center space-x-2">
                     <label for="importance" class="font-semibold">Penting?</label>
                     <input type="hidden" name="importance" value={importance ? 'true' : 'false'} />

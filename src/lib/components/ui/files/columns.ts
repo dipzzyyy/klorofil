@@ -74,17 +74,16 @@ export const columns: ColumnDef<File>[] = [
     return value.includes(row.getValue(id) as string);
   },
   },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      // You can pass whatever you need from `row.original` to the component
-          return renderComponent(DataTableActions, 
-            { file: row.original
-            }
-          );
-          // return renderComponent(DataTableActions<File>, { row });
-      },
-  },
+  // {
+  //   id: "actions",
+  //   cell: ({ row }) => {
+  //     // You can pass whatever you need from `row.original` to the component
+  //         return renderComponent(DataTableActions, 
+  //           { file: row.original,
+  //           }
+  //         );
+  //     },
+  // },
   {
     id: "label",
     accessorFn: (row) => row.label,

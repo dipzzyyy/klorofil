@@ -12,7 +12,10 @@
     import FileForm from "$lib/components/ui/files/file-form.svelte"
     import type { SuperValidated, Infer } from "sveltekit-superforms";
     import type { FileSchema } from "$lib/schemas/files-schema.js"
-    let { form }: { form: SuperValidated<Infer<FileSchema>> } = $props();
+    let { form, labels }: { 
+		form: SuperValidated<Infer<FileSchema>>
+		labels: string[];
+	} = $props();
 
     // modal
 	let open = $state(false);
@@ -35,7 +38,7 @@
 			</Dialog.Header>
 			<div class="space-y-3 p-1">
                 <!-- form -->
-                <FileForm dataForm={form} onSuccess={handleClose} />
+                <FileForm dataForm={form} onSuccess={handleClose} labels={labels} />
 			</div>
 		</Dialog.Content>
 	</Dialog.Root>
@@ -47,7 +50,7 @@
 			</Drawer.Header>
 			<div class="mt-4 px-4 space-y-2 overflow-y-auto flex-1 mb-5">
                 <!-- form -->
-                <FileForm dataForm={form} onSuccess={handleClose} />
+                <FileForm dataForm={form} onSuccess={handleClose} labels={labels} />
 			</div>
 		</Drawer.Content>
 	</Drawer.Root>
