@@ -11,7 +11,7 @@ import { z } from "zod";
 export const load: PageServerLoad = async () => {
 	const form = await superValidate(zod(fileSchema));
 	// read from db
-	const { data, error } = await supabase.from('files').select().order('id', { ascending: true });;
+	const { data, error } = await supabase.from('files').select().order('id', { ascending: true });
 
 	// if db error
 	if (error) {
