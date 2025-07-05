@@ -196,6 +196,22 @@ export const actions: Actions = {
 		};
 	},
 	deleteEvent: async (event) => {
+		const formData = Object.fromEntries(await event.request.formData());
+		const id = Number(formData.id);
 
+		if (!id || isNaN(id)) {
+			return fail(400, { message: "ID tidak valid untuk hapus." });
+		}
+
+		const { error } = await supabase
+			.from("event")
+			.delete()
+			.eq("id", id);
+
+		if (error) {
+			return fail(500, { message: "Gagal menghapus: " + error.message });
+		}
+
+		return { success: true };
 	},
 } satisfies Actions;

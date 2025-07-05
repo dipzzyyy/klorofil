@@ -182,7 +182,7 @@
 <Drawer.Root bind:open>
     <Drawer.Content>
         <Drawer.Header>
-            <Drawer.Title>Edit Fail</Drawer.Title>
+            <Drawer.Title>Sunting Fail</Drawer.Title>
         </Drawer.Header>
         <div class="gap-2 p-5 overflow-y-auto">
             <form method="POST" use:enhance={() => {
