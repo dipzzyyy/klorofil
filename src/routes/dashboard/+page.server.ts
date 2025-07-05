@@ -2,6 +2,7 @@ import type { PageServerLoad, Actions } from "./$types.js";
 import { fail } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
 import { fileSchema } from "$lib/schemas/files-schema.js";
+import { eventSchema } from "$lib/schemas/event-schema.js";
 import { zod } from "sveltekit-superforms/adapters"
 import { supabase } from "$lib/server/supabaseConfig.js";
 import type { Action } from "$lib/components/ui/card/index.js";
@@ -10,17 +11,28 @@ import { z } from "zod";
 
 export const load: PageServerLoad = async () => {
 	const form = await superValidate(zod(fileSchema));
+	const formEvent = await superValidate(zod(eventSchema));
+	const formEditEvent = await superValidate(zod(eventSchema));
 	// read from db
 	const { data, error } = await supabase.from('files').select().order('id', { ascending: true });
+	const { data: dataEvent, error:errorEvent } = await supabase.from('event').select().order('id', { ascending: true });
+	const { data: teamList, error:errorTeam } = await supabase.from('team').select().order('id', { ascending: true });
 
 	// if db error
 	if (error) {
 		return fail(500, { form: await superValidate(zod(fileSchema)) });
 	}
+	if (errorEvent) {
+		return fail(500, { formEvent: await superValidate(zod(eventSchema)) });
+	}
 	
 	return { 
 		form,
-		data
+		data,
+		formEvent,
+		formEditEvent,
+		dataEvent,
+		teamList
 	};
 };
 
@@ -116,5 +128,74 @@ export const actions: Actions = {
 		}
 
 		return { success: true };
-	}
+	},
+	createEvent: async (event) => {
+		const form = await superValidate(event, zod(eventSchema));
+		//   client checking
+		if (!form.valid) {
+			return fail(400, {
+			form,
+			});
+		}
+		
+		// inserting thru db
+		const { error } = await supabase
+			.from('event')
+			.insert({
+				name: form.data.name,
+				description: form.data.description,
+				start: form.data.start,
+				end: form.data.end,
+				team: form.data.team,
+			});
+
+		// and if it doesnt insert
+		if (error) {
+			return fail(500, {
+				form,
+				message: 'Gagal menyimpan ke database: ' + error.message
+			});
+		}
+
+		return {
+			form,
+		};
+	},
+	updateEvent: async (event) => {
+		const form = await superValidate(event, zod(eventSchema));
+		console.log(form.data);
+		//   client checking
+		if (!form.valid) {
+			return fail(400, {
+			form,
+			});
+		}
+		// inserting thru db
+		const { error } = await supabase
+			.from('event')
+			.update({
+				name: form.data.name,
+				description: form.data.description,
+				start: form.data.start,
+				end: form.data.end,
+				team: form.data.team,
+			})
+			.eq("id", form.data.id);
+
+
+		// and if it doesnt insert
+		if (error) {
+			return fail(500, {
+				form,
+				message: 'Gagal update ke database: ' + error.message
+			});
+		}
+
+		return {
+			form,
+		};
+	},
+	deleteEvent: async (event) => {
+
+	},
 } satisfies Actions;

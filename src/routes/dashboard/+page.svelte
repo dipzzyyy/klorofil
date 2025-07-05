@@ -35,7 +35,7 @@
         <!-- calendar -->
         <div class="w-full min-w-0">
           <div class="rounded-xl w-full h-full p-4 sm:p-6 md:p-8 bg-white shadow">
-            <CalendarEvent />
+            <CalendarEvent eventForm={props.data.formEvent} eventEditForm={props.data.formEditEvent} eventData={props.data.dataEvent} teamList={props.data.teamList}/>
           </div>
         </div>
     

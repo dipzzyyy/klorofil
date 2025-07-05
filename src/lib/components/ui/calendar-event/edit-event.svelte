@@ -25,34 +25,24 @@
     import { RangeCalendar } from "$lib/components/ui/range-calendar/index.js";
     import * as Popover from "$lib/components/ui/popover/index.js";
     import * as Select from "$lib/components/ui/select/index.js";
+    import type { EventItem } from "$lib/components/ui/calendar-event/event-item-type"
         
-    let { initForm, onSuccess, teamList }: { 
+    let { initForm, onSuccess, teamList, editItem }: { 
         initForm: SuperValidated<Infer<EventSchema>>;
         onSuccess?: () => void;
         teamList: {id:number, tim:string}[];
+        editItem: EventItem;
     } = $props();
     
-    const df = new DateFormatter("en-US", {
+    const df = new DateFormatter("id-ID", {
         dateStyle: "medium"
     });
-
-    const today = now(getLocalTimeZone());
     
     let value: DateRange = $state({
         start: undefined,
         end: undefined
     });
     
-    let startValue: DateValue | undefined = $state(undefined);
-
-    function updateDate() {
-        if(value.start) {
-            $formEvent.start = value.start.toDate(getLocalTimeZone());
-        }
-        if(value.end) {
-            $formEvent.end = value.end.toDate(getLocalTimeZone());
-        }
-    }
 
     // form config
 
@@ -60,21 +50,49 @@
         validators: zodClient(eventSchema),
         onResult: async ({ result: f }) => {
         if (f.status == 200) {
-            console.log($formEvent);
-            toast.success(`Berhasil menambahkan.`);
+            toast.success(`Berhasil memperbarui.`);
             // refresh page
             await invalidateAll();
             onSuccess?.();
         } else {
-            toast.error("Gagal menambahkan. Tolong perbaiki isian anda");
+            console.log($formEvent);
+            toast.error("Gagal memperbarui. Tolong perbaiki isian anda");
         }
         },
     });
 
     const { form: formEvent, enhance: enhanceEvent } = form;
+
+    // Prefill form data dari editItem
+    $formEvent.id = editItem.id;
+    $formEvent.name = editItem.name;
+    $formEvent.description = editItem.description;
+    $formEvent.team = editItem.team;
+
+    const startDate = new Date(editItem.start);
+    const endDate = new Date(editItem.end);
+
+    let localDates = $state({
+    start: new CalendarDate(
+        startDate.getFullYear(),
+        startDate.getMonth() + 1,
+        startDate.getDate()
+    ),
+    end: new CalendarDate(
+        endDate.getFullYear(),
+        endDate.getMonth() + 1,
+        endDate.getDate()
+    )
+    });
+
+    function calendarDateToISO(date: CalendarDate | undefined): string {
+        if (!date) return "";
+        return `${date.year}-${String(date.month).padStart(2, "0")}-${String(date.day).padStart(2, "0")}T00:00:00.000Z`;
+    }
+
 </script>
     
-<form method="POST" use:enhanceEvent class="space-y-6" action="?/createEvent">
+<form method="POST" use:enhanceEvent class="space-y-6" action="?/updateEvent">
     <!-- judul -->
     <Form.Field {form} name="name">
         <Form.Control>
@@ -95,77 +113,62 @@
         </Form.Control>
         <Form.FieldErrors />
     </Form.Field>
-    <!-- date start -->
+    <!-- Date -->
     <Form.Field {form} name="start">
         <Form.Control>
             {#snippet children({ props })}
-            <Form.Label>Tanggal Kegiatan*</Form.Label>
-            <div class="grid gap-2">
+                <Form.Label>Tanggal Kegiatan*</Form.Label>
                 <Popover.Root>
-                    <Popover.Trigger
-                        class={cn(
-                            buttonVariants({ variant: "outline" }),
-                            !value && "text-muted-foreground"
-                        )}
-                    >
-                    <CalendarIcon class="mr-2 size-4" />
-                    {#if value && value.start}
-                        {#if value.end}
-                            {df.format(value.start.toDate(getLocalTimeZone()))} - {df.format(
-                                value.end.toDate(getLocalTimeZone())
-                            )}
+                    <Popover.Trigger class={cn(buttonVariants({ variant: "outline" }))}>
+                        <CalendarIcon class="mr-2 size-4" />
+                        {#if localDates.start}
+                            {df.format(localDates.start.toDate(getLocalTimeZone()))}
+                            {#if localDates.end}
+                                - {df.format(localDates.end.toDate(getLocalTimeZone()))}
+                            {/if}
                         {:else}
-                            {df.format(value.start.toDate(getLocalTimeZone()))}
+                            Pilih tanggal
                         {/if}
-                    {:else if startValue}
-                        {df.format(startValue.toDate(getLocalTimeZone()))}
-                    {:else}
-                        Pilih rentang tanggal kegiatan
-                    {/if}
                     </Popover.Trigger>
                     <Popover.Content class="w-auto p-0" align="start">
-                    <RangeCalendar
-                        bind:value={value}
-                        onValueChange={() => updateDate()}
-                        numberOfMonths={2}
-                    />
+                        <RangeCalendar
+                            bind:value={localDates}
+                            numberOfMonths={2}
+                        />
                     </Popover.Content>
                 </Popover.Root>
-            </div>
-            <input type="hidden" name="start" value={value.start ? value.start.toDate(getLocalTimeZone()).toISOString() : ""} />
-            <input type="hidden" name="end" value={value.end ? value.end.toDate(getLocalTimeZone()).toISOString() : ""} />
+                <input type="hidden" name="start" value={localDates.start ? localDates.start.toDate(getLocalTimeZone()).toISOString() : ""} />
+                <input type="hidden" name="end" value={localDates.end ? localDates.end.toDate(getLocalTimeZone()).toISOString() : ""} />
             {/snippet}
         </Form.Control>
         <Form.FieldErrors />
     </Form.Field>
-    <!-- team -->
+
+    <input type="hidden" name="start" value={localDates.start ? localDates.start.toDate(getLocalTimeZone()).toISOString() : ""} />
+    <input type="hidden" name="end" value={localDates.end ? localDates.end.toDate(getLocalTimeZone()).toISOString() : ""} />
+
+      <!-- Team -->
     <Form.Field {form} name="team">
-    <Form.Control>
+        <Form.Control>
         <Form.Label>Pilih Tim*</Form.Label>
-        <Select.Root
-        type="single"
-        bind:value={$formEvent.team}
-        class="w-full"
-        >
-        <Select.Trigger class="w-full">
+        <Select.Root type="single" bind:value={$formEvent.team} class="w-full">
+            <Select.Trigger class="w-full">
             {#if $formEvent.team}
                 {teamList.find(t => t.id === +$formEvent.team)?.tim || "Pilih tim"}
             {:else}
                 Pilih tim
             {/if}
-        </Select.Trigger>
-        <Select.Content>
+            </Select.Trigger>
+            <Select.Content>
             {#each teamList as team}
-                <Select.Item value={team.id.toString()}>
-                {team.tim}
-            </Select.Item>
+                <Select.Item value={team.id.toString()}>{team.tim}</Select.Item>
             {/each}
-        </Select.Content>
-    </Select.Root>
-    <input type="hidden" name="team" value={$formEvent.team} />
-    </Form.Control>
-    <Form.Description>Pilih tim yang terlibat. Untuk semua pegawai dapat menggunakan tim "General"</Form.Description>
-    <Form.FieldErrors />
+            </Select.Content>
+        </Select.Root>
+        </Form.Control>
+        <Form.FieldErrors />
     </Form.Field>
-    <Form.Button>Tambahkan</Form.Button>
+    <input type="hidden" name="team" value={$formEvent.team} />
+    <input type="hidden" name="id" value={editItem.id} />
+    <Form.Button>Perbarui</Form.Button>
 </form>
