@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { formatDateRange } from "little-date";
 	import PlusIcon from "@lucide/svelte/icons/plus";
+	import InfoIcon from "@lucide/svelte/icons/info";
 	import EditIcon from "@lucide/svelte/icons/pencil-line";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import { Calendar } from "bits-ui";
@@ -10,6 +11,7 @@
 	import * as Drawer from "$lib/components/ui/drawer/index.js";
 	import AddEventForm from "$lib/components/ui/calendar-event/add-event.svelte"
 	import EditEventForm from "$lib/components/ui/calendar-event/edit-event.svelte"
+	import ViewEventDetails from "$lib/components/ui/calendar-event/view-event.svelte"
 	import { CalendarDate, getLocalTimeZone, type DateValue, now, today } from "@internationalized/date";
     import type { Infer, SuperValidated } from "sveltekit-superforms";
     import type { EventSchema } from "$lib/schemas/event-schema";
@@ -19,6 +21,7 @@
     import { Tooltip } from "bits-ui";
     import { toast } from "svelte-sonner";
     import { invalidateAll } from "$app/navigation";
+    import { TooltipProvider } from "./ui/tooltip";
 
 	let { eventForm, eventEditForm, eventData, teamList } : {
 		eventForm: SuperValidated<Infer<EventSchema>>;
@@ -27,9 +30,11 @@
 		teamList: {id:number, tim:string}[];
 	} = $props()
 
+	// tampilin modal. create is for create form, edit is for edit form, and view is for viewing
 	let showForm = $state(false);
 	let isCreate = $state(false);
 	let isEdit = $state(false);
+	let isView = $state(false);
 
 	// var to store what items wanna be edited
 	let editItem = $state<EventItem>({
@@ -89,7 +94,6 @@
 				await invalidateAll();
 			} 
 		} catch (e) {
-			console.error("Error deleting event:", e);
             toast.error("Gagal menghapus");
         }
     }
@@ -172,17 +176,15 @@
 		const teamIndex = teamList.findIndex(t => t.id === ev.team);
 		return colors[teamIndex % colors.length] || "#6b7280"; // fallback gray
 	}
-
-	console.log(eventData);
 </script>
 
 <Card.Root class="w-full">
-	<Card.Content class="w-full">
+	<Card.Content class="w-full p-4 sm:p-0">
 		<div class="">
 			<Calendar.Root 
 				type="single" 
 				bind:value 
-				class="w-full bg-transparent px-10 border-dark-10 shadow-card rounded-[15px] border p-4"
+				class="w-full bg-transparent md:px-10 border-dark-10 shadow-card rounded-[15px] border p-4"
 				preventDeselect
 				weekdayFormat="long"
 				fixedWeeks={true}
@@ -218,7 +220,7 @@
 												<Calendar.Cell
 													{date}
 													month={month.value}
-													class="p-0! relative size-10 text-center text-sm"
+													class="p-0! relative md:size-10 aspect-square text-center text-sm w-full"
 												>
 													<Calendar.Day
 														class="rounded text-foreground hover:border-foreground data-selected:bg-primary data-disabled:text-foreground/30 data-outside-month:pointer-events-none data-selected:text-background group relative inline-flex size-10 items-center justify-center whitespace-nowrap border border-transparent bg-transparent p-0 text-sm"
@@ -261,15 +263,16 @@
 				variant="ghost" 
 				size="icon" 
 				class="size-6" 
-				title="Add Event"
+				title="Tambahkan Kegiatan"
 				onclick={() => {
 					showForm=true; 
 					isCreate=true;
 					isEdit=false;
+					isView = false;
 				}}
 			>
 				<PlusIcon />
-				<span class="sr-only">Add Event</span>
+				<span class="sr-only">Tambahkan Kegiatan</span>
 			</Button>
 		</div>
 		<div class="w-full max-h-48 overflow-y-auto pr-2 flex flex-col gap-3">
@@ -291,45 +294,73 @@
 								{formatTanggalRange(event.start, event.end)} - {teamList.find(t => t.id === event.team)?.tim || 'Tim tidak ditemukan'}
 							</div>
 						</div>
-						<!-- action dropdown -->
-						<Tooltip.Provider>
-							<Tooltip.Root>
-								<Tooltip.Trigger>
-									<DropdownMenu.Root>
-										<DropdownMenu.Trigger>
-											<Button
-												variant="ghost"
-												size="icon"
-												class="relative size-8 p-0"
-											>
-												<span class="sr-only">Aksi Lain</span>
-												<EllipsisIcon />
-											</Button>
-										</DropdownMenu.Trigger>
-										<DropdownMenu.Content>
-											<DropdownMenu.Item onSelect={() => {
+						<div>
+							<Tooltip.Provider>
+								<Tooltip.Root>
+									<Tooltip.Trigger>
+										<Button 
+											size="icon"
+											variant="ghost"
+											onclick={() => {
 												showForm = true;
 												isCreate = false;
-												isEdit = true;
+												isEdit = false;
+												isView = true;
 												editItem = event;
-											}}>
-												Sunting
-											</DropdownMenu.Item>
-											<DropdownMenu.Item onSelect={() => deleteEvent(event.id)}>
-												Hapus
-											</DropdownMenu.Item>
-										</DropdownMenu.Content>
-									</DropdownMenu.Root>
-								</Tooltip.Trigger>
-								<Tooltip.Content
-									side="top"
-									align="center"
-									class="z-50 rounded-md bg-black px-3 py-1.5 text-sm text-white shadow-md"
-								>
-									<p>Aksi Lain</p>
-								</Tooltip.Content>
-							</Tooltip.Root>
-						</Tooltip.Provider>
+										}}>
+											<InfoIcon/>
+										</Button>
+									</Tooltip.Trigger>
+									<Tooltip.Content
+										side="top"
+										align="center"
+										class="z-50 rounded-md bg-black px-3 py-1.5 text-sm text-white shadow-md"
+									>
+										<p>Detail Kegiatan</p>
+									</Tooltip.Content>
+								</Tooltip.Root>
+							</Tooltip.Provider> 
+							<!-- action dropdown -->
+							<Tooltip.Provider>
+								<Tooltip.Root>
+									<Tooltip.Trigger>
+										<DropdownMenu.Root>
+											<DropdownMenu.Trigger>
+												<Button
+													variant="ghost"
+													size="icon"
+													class="relative size-8 p-0"
+												>
+													<span class="sr-only">Aksi Lain</span>
+													<EllipsisIcon />
+												</Button>
+											</DropdownMenu.Trigger>
+											<DropdownMenu.Content>
+												<DropdownMenu.Item onSelect={() => {
+													showForm = true;
+													isCreate = false;
+													isView = false;
+													isEdit = true;
+													editItem = event;
+												}}>
+													Sunting
+												</DropdownMenu.Item>
+												<DropdownMenu.Item class="hover:bg-red-400 text-red-800" onSelect={() => deleteEvent(event.id)}>
+													Hapus
+												</DropdownMenu.Item>
+											</DropdownMenu.Content>
+										</DropdownMenu.Root>
+									</Tooltip.Trigger>
+									<Tooltip.Content
+										side="top"
+										align="center"
+										class="z-50 rounded-md bg-black px-3 py-1.5 text-sm text-white shadow-md"
+									>
+										<p>Aksi Lain</p>
+									</Tooltip.Content>
+								</Tooltip.Root>
+							</Tooltip.Provider>
+						</div>
 					</div>
 				{/each}
 			{:else}
@@ -339,8 +370,8 @@
 	</Card.Footer>
 </Card.Root>
 
-<!-- add event -->
-{#if isDesktop} 
+<!-- popup for add event and update -->
+{#if isDesktop.current} 
 	<Dialog.Root open={showForm} onOpenChange={(v) => showForm = v}>
 		<Dialog.Content>
 			<Dialog.Header>
@@ -348,12 +379,16 @@
 				<Dialog.Title>Tambah Kegiatan</Dialog.Title>
 				{:else if isEdit}
 				<Dialog.Title>Perbarui Kegiatan</Dialog.Title>
+				{:else if isView}
+				<Dialog.Title>Detail Kegiatan</Dialog.Title>
 				{/if}
 			</Dialog.Header>
 			{#if isCreate}
-			<AddEventForm initForm={eventForm} onSuccess={() => showForm = false} teamList={teamList} />
+				<AddEventForm initForm={eventForm} onSuccess={() => showForm = false} teamList={teamList} />
 			{:else if isEdit}
-			<EditEventForm initForm={eventEditForm} onSuccess={() => showForm = false} teamList={teamList} editItem={editItem} />
+				<EditEventForm initForm={eventEditForm} onSuccess={() => showForm = false} teamList={teamList} editItem={editItem} />
+			{:else if isView}
+				<ViewEventDetails viewItem={editItem} onSuccess={() => showForm = false } teamList={teamList}/>
 			{/if}
 		</Dialog.Content>
 	</Dialog.Root>
@@ -365,13 +400,19 @@
 				<Drawer.Title>Tambah Kegiatan</Drawer.Title>
 				{:else if isEdit}
 				<Drawer.Title>Perbarui Kegiatan</Drawer.Title>
+				{:else if isView}
+				<Drawer.Title>Detail Kegiatan</Drawer.Title>
 				{/if}
 			</Drawer.Header>
-			{#if isCreate}
-			<AddEventForm initForm={eventForm} onSuccess={() => showForm = false} teamList={teamList} />
-			{:else if isEdit}
-			<EditEventForm initForm={eventEditForm} onSuccess={() => showForm = false} teamList={teamList} editItem={editItem} />
-			{/if}
+			<div class="gap-2 p-5 overflow-y-auto">
+				{#if isCreate}
+				<AddEventForm initForm={eventForm} onSuccess={() => showForm = false} teamList={teamList} />
+				{:else if isEdit}
+				<EditEventForm initForm={eventEditForm} onSuccess={() => showForm = false} teamList={teamList} editItem={editItem} />
+				{:else if isView}
+				<ViewEventDetails viewItem={editItem} onSuccess={() => showForm = false } teamList={teamList}/>
+				{/if}
+			</div>
 		</Drawer.Content>
 	</Drawer.Root>
 {/if}

@@ -35,27 +35,27 @@
 				items: [
 					{
 						title: "Subbagian Umum",
-						url: "tim/umum",
+						url: "umum",
 					},
 					{
 						title: "Distribusi",
-						url: "tim/distribusi",
+						url: "distribusi",
 					},
 					{
 						title: "Neraca",
-						url: "tim/neraca",
+						url: "neraca",
 					},
 					{
 						title: "Sosial",
-						url: "tim/sosial",
+						url: "sosial",
 					},
 					{
 						title: "Produksi",
-						url: "tim/produksi",
+						url: "produksi",
 					},
 					{
 						title: "IPDS",
-						url: "tim/ipds",
+						url: "ipds",
 					},
 				],
 			},
@@ -66,65 +66,65 @@
 				items: [
 					{
 						title: "Zona Integritas",
-						url: "#",
+						url: "/umum/zi",
 					},
 					{
 						title: "PEKPPP",
-						url: "#",
+						url: "/ipds/pekppp",
 					},
 					{
 						title: "Humas",
-						url: "#",
+						url: "/umum/humas",
 					},
 					{
 						title: "Sakip",
-						url: "#",
+						url: "/umum/sakip",
 					},
 					{
 						title: "Sektoral",
-						url: "#",
+						url: "/ipds/sektoral",
 					},
 					{
 						title: "Desa Cantik",
-						url: "#",
+						url: "/sosial/descan",
 					},
 				],
 			},
-			{
-				title: "Data Strategis",
-				url: "#",
-				icon: DataIcon,
-				items: [
-					{
-						title: "Kependudukan",
-						url: "#",
-					},
-					{
-						title: "Kesehatan",
-						url: "#",
-					},
-					{
-						title: "Ketenagakerjaan",
-						url: "#",
-					},
-					{
-						title: "Kemiskinan",
-						url: "#",
-					},
-					{
-						title: "Pendidikan",
-						url: "#",
-					},
-					{
-						title: "Pembangunan Manusia",
-						url: "#",
-					},
-					{
-						title: "Perekonomian",
-						url: "#",
-					},
-				],
-			},
+			// {
+			// 	title: "Data Strategis",
+			// 	url: "#",
+			// 	icon: DataIcon,
+			// 	items: [
+			// 		{
+			// 			title: "Kependudukan",
+			// 			url: "/data_strategis/kependudukan",
+			// 		},
+			// 		{
+			// 			title: "Kesehatan",
+			// 			url: "#",
+			// 		},
+			// 		{
+			// 			title: "Ketenagakerjaan",
+			// 			url: "#",
+			// 		},
+			// 		{
+			// 			title: "Kemiskinan",
+			// 			url: "#",
+			// 		},
+			// 		{
+			// 			title: "Pendidikan",
+			// 			url: "#",
+			// 		},
+			// 		{
+			// 			title: "Pembangunan Manusia",
+			// 			url: "#",
+			// 		},
+			// 		{
+			// 			title: "Perekonomian",
+			// 			url: "#",
+			// 		},
+			// 	],
+			// },
 		],
 		navSecondary: [
 			{

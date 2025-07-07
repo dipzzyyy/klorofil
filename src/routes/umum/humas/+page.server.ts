@@ -14,8 +14,8 @@ export const load: PageServerLoad = async () => {
 	const formEvent = await superValidate(zod(eventSchema));
 	const formEditEvent = await superValidate(zod(eventSchema));
 	// read from db
-	const { data, error } = await supabase.from('files').select().eq('team', 1).order('id', { ascending: true });
-	const { data: dataEvent, error:errorEvent } = await supabase.from('event').select().order('id', { ascending: true });
+	const { data, error } = await supabase.from('files').select().eq('team', 10).order('id', { ascending: true });
+	const { data: dataEvent, error:errorEvent } = await supabase.from('event').select().eq('team', 10).order('id', { ascending: true });
 	const { data: teamList, error:errorTeam } = await supabase.from('team').select().order('id', { ascending: true });
 
 	// if db error

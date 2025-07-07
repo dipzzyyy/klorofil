@@ -36,7 +36,7 @@
 
     // modal
     let selectedInfo = $state(null);
-    function openInfo(item) {
+    function openInfo(item:any) {
         selectedInfo = item;
     }
 	const isDesktop = new MediaQuery("(min-width: 768px)");
@@ -52,32 +52,38 @@
         </Card.Action>
     </Card.Header>
     <ScrollArea class="h-72 w-full rounded-md border p-4 bg-gray-50">
-        <div class="grid gap-4">
-            {#each sortedInformation as info (info.id)}
-                <Card.Root>
-                    <Card.Header>
-                        <Card.Title class="truncate py-2">
-                            {info.name}
-                        </Card.Title>
-                        <Card.Description class="truncate">
-                            {info.description}
-                        </Card.Description>
-                        <Card.Action>
-                            <!-- kalau tidak urgent, gaada badge nya -->
-                             {#if info.importance === "true"}
-                                <Badge
-                                    class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums"
-                                    variant="destructive"
-                                ></Badge>
-                            {/if}
-                            <Button variant="ghost" onclick={() => openInfo(info)}>
-                                <NextIcon />
-                            </Button>
-                        </Card.Action>
-                    </Card.Header>
-                </Card.Root>
-            {/each}
-        </div>
+        {#if sortedInformation.length > 0}
+            <div class="grid gap-4">
+                {#each sortedInformation as info (info.id)}
+                    <Card.Root>
+                        <Card.Header>
+                            <Card.Title class="truncate py-2">
+                                {info.name}
+                            </Card.Title>
+                            <Card.Description class="truncate">
+                                {info.description}
+                            </Card.Description>
+                            <Card.Action>
+                                <!-- kalau tidak urgent, gaada badge nya -->
+                                {#if info.importance === "true"}
+                                    <Badge
+                                        class="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums"
+                                        variant="destructive"
+                                    ></Badge>
+                                {/if}
+                                <Button variant="ghost" onclick={() => openInfo(info)}>
+                                    <NextIcon />
+                                </Button>
+                            </Card.Action>
+                        </Card.Header>
+                    </Card.Root>
+                {/each}
+            </div>
+        {:else}
+            <div class="flex-inline justify-items-center justify-center italic text-gray-400">
+                <p>Belum ada informasi untuk saat ini.</p> 
+            </div>
+        {/if}
     </ScrollArea>
 
     {#if selectedInfo} 

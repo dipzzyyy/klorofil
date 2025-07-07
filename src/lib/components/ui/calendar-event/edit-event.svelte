@@ -90,6 +90,11 @@
         return `${date.year}-${String(date.month).padStart(2, "0")}-${String(date.day).padStart(2, "0")}T00:00:00.000Z`;
     }
 
+    $effect(() => {
+        $formEvent.start = localDates.start.toDate(getLocalTimeZone())
+        $formEvent.end = localDates.end.toDate(getLocalTimeZone())
+    });
+
 </script>
     
 <form method="POST" use:enhanceEvent class="space-y-6" action="?/updateEvent">
@@ -98,7 +103,7 @@
         <Form.Control>
             {#snippet children({ props })}
             <Form.Label>Nama Kegiatan*</Form.Label>
-            <Input {...props} bind:value={$formEvent.name} placeholder="Masukkan judul fail" />
+            <Input {...props} bind:value={$formEvent.name} placeholder="Masukkan judul kegiatan" />
             {/snippet}
         </Form.Control>
         <Form.FieldErrors />
@@ -108,44 +113,55 @@
         <Form.Control>
             {#snippet children({ props })}
             <Form.Label>Deskripsi</Form.Label>
-            <Input {...props} bind:value={$formEvent.description} placeholder="Deskripsi fail" />
+            <Input {...props} bind:value={$formEvent.description} placeholder="Deskripsi kegiatan" />
             {/snippet}
         </Form.Control>
         <Form.FieldErrors />
     </Form.Field>
     <!-- Date -->
     <Form.Field {form} name="start">
-        <Form.Control>
-            {#snippet children({ props })}
-                <Form.Label>Tanggal Kegiatan*</Form.Label>
-                <Popover.Root>
-                    <Popover.Trigger class={cn(buttonVariants({ variant: "outline" }))}>
-                        <CalendarIcon class="mr-2 size-4" />
-                        {#if localDates.start}
-                            {df.format(localDates.start.toDate(getLocalTimeZone()))}
-                            {#if localDates.end}
-                                - {df.format(localDates.end.toDate(getLocalTimeZone()))}
-                            {/if}
-                        {:else}
-                            Pilih tanggal
-                        {/if}
-                    </Popover.Trigger>
-                    <Popover.Content class="w-auto p-0" align="start">
-                        <RangeCalendar
-                            bind:value={localDates}
-                            numberOfMonths={2}
-                        />
-                    </Popover.Content>
-                </Popover.Root>
-                <input type="hidden" name="start" value={localDates.start ? localDates.start.toDate(getLocalTimeZone()).toISOString() : ""} />
-                <input type="hidden" name="end" value={localDates.end ? localDates.end.toDate(getLocalTimeZone()).toISOString() : ""} />
-            {/snippet}
-        </Form.Control>
-        <Form.FieldErrors />
+    <Form.Control>
+        {#snippet children({ props })}
+        <Form.Label>Tanggal Kegiatan*</Form.Label>
+        <Popover.Root>
+            <Popover.Trigger class={cn(buttonVariants({ variant: "outline" }))}>
+            <CalendarIcon class="mr-2 size-4" />
+            {#if localDates.start}
+                {df.format(localDates.start.toDate(getLocalTimeZone()))}
+                {#if localDates.end}
+                - {df.format(localDates.end.toDate(getLocalTimeZone()))}
+                {/if}
+            {:else}
+                Pilih tanggal
+            {/if}
+            </Popover.Trigger>
+            <Popover.Content class="w-auto p-0" align="start">
+            <RangeCalendar bind:value={localDates} numberOfMonths={2} />
+            </Popover.Content>
+        </Popover.Root>
+        {/snippet}
+    </Form.Control>
+
+    <!-- 🚀 These will ensure start/end go to the server -->
+    <input
+        type="hidden"
+        name="start"
+        value={localDates.start
+        ? localDates.start.toDate(getLocalTimeZone()).toISOString()
+        : ""}
+    />
+    <input
+        type="hidden"
+        name="end"
+        value={localDates.end
+        ? localDates.end.toDate(getLocalTimeZone()).toISOString()
+        : ""}
+    />
+
+    <Form.FieldErrors />
     </Form.Field>
 
-    <input type="hidden" name="start" value={localDates.start ? localDates.start.toDate(getLocalTimeZone()).toISOString() : ""} />
-    <input type="hidden" name="end" value={localDates.end ? localDates.end.toDate(getLocalTimeZone()).toISOString() : ""} />
+
 
       <!-- Team -->
     <Form.Field {form} name="team">

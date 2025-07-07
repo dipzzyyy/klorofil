@@ -15,6 +15,7 @@
 		column,
 		title,
 		options,
+		icon = CirclePlusIcon
 	}: {
 		column: Column<TData, TValue>;
 		title: string;
@@ -23,6 +24,7 @@
 			value: string;
 			icon?: Component;
 		}[];
+		icon?: Component;
 	} = $props();
 
 	const facets = $derived(column?.getFacetedUniqueValues());
@@ -33,7 +35,8 @@
 	<Popover.Trigger>
 		{#snippet child({ props })}
 			<Button {...props} variant="outline" size="sm" class="h-8 border-dashed">
-				<CirclePlusIcon />
+				{@const Icon = icon}
+					<Icon />
 				{title}
 				{#if selectedValues.size > 0}
 					<Separator orientation="vertical" class="mx-2 h-4" />
