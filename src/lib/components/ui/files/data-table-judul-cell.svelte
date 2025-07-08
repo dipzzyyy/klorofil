@@ -53,7 +53,7 @@
                 {/if}
 				<div class="flex justify-end gap-2 pt-4">
                     <Button variant="outline" onclick={() => (open = false)}>Tutup</Button>
-					<Button variant="default">Sunting</Button>
+					<!-- <Button variant="default">Sunting</Button> -->
 				</div>
 			</div>
 		</Dialog.Content>
@@ -78,7 +78,7 @@
 				{/if}
 				<div class="flex justify-end gap-2 pt-4 pb-6">
 					<Button variant="outline" onclick={() => (open = false)}>Tutup</Button>
-					<Button variant="default">Sunting</Button>
+					<!-- <Button variant="default">Sunting</Button> -->
 				</div>
 			</div>
 		</Drawer.Content>
