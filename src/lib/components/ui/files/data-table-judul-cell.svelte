@@ -5,7 +5,7 @@
 	import { Button } from "$lib/components/ui/button";
 	import { Badge } from "$lib/components/ui/badge";
 	import { format } from "date-fns";
-	import { id as idLocale } from "date-fns/locale";
+	import id from "date-fns/locale/id/index.js";
 
 	let {
 		name,          // file name
@@ -18,10 +18,11 @@
 
 	let open = $state(false);
 	const isDesktop = new MediaQuery("(min-width: 768px)");
-
-    const id = $props.id();
-	// const label = $derived(labelValue ? { label: labelValue } : null);
-	const formattedDate = format(new Date(date), "dd MMMM yyyy", { locale: idLocale });
+	// Format the date to Indonesian locale
+	// Use "dd MMMM yyyy" format for day, full month name, and year
+	const formattedDate = format(new Date(date), "dd MMMM yyyy", {
+		locale: id,
+	});
 </script>
 
 <button
@@ -29,9 +30,6 @@
 	type="button"
 	class="inline-flex font-medium items-center hover:underline max-w-[500px] truncate bg-transparent border-none p-0 m-0 cursor-pointer"
 >
-	<!-- {#if label}
-		<Badge variant="outline">{label.label}</Badge>
-	{/if} -->
 	<span class="ml-1">{name}</span>
 </button>
 

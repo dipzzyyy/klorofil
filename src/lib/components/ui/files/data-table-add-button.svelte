@@ -5,7 +5,7 @@
 	import { Button } from "$lib/components/ui/button";
 	import { Badge } from "$lib/components/ui/badge";
 	import { format } from "date-fns";
-	import { id as idLocale } from "date-fns/locale";
+	import id from "date-fns/locale/id/index.js";
     import PlusIcon from "@lucide/svelte/icons/plus"
 
     // form
