@@ -24,7 +24,7 @@
         <Breadcrumb.Root>
           <Breadcrumb.List>
             <Breadcrumb.Item>
-              <Breadcrumb.Page>Dashboard</Breadcrumb.Page>
+              <Breadcrumb.Page>Subbagian Umum</Breadcrumb.Page>
             </Breadcrumb.Item>
           </Breadcrumb.List>
         </Breadcrumb.Root>

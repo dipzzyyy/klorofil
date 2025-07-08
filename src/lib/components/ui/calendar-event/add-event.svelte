@@ -60,7 +60,6 @@
         validators: zodClient(eventSchema),
         onResult: async ({ result: f }) => {
         if (f.status == 200) {
-            console.log($formEvent);
             toast.success(`Berhasil menambahkan.`);
             // refresh page
             await invalidateAll();

@@ -55,7 +55,6 @@
             await invalidateAll();
             onSuccess?.();
         } else {
-            console.log($formEvent);
             toast.error("Gagal memperbarui. Tolong perbaiki isian anda");
         }
         },

@@ -14,7 +14,7 @@ export const load: PageServerLoad = async () => {
 	const formEvent = await superValidate(zod(eventSchema));
 	const formEditEvent = await superValidate(zod(eventSchema));
 	// read from db
-	const { data, error } = await supabase.from('files').select().eq('team', 13).order('id', { ascending: true });
+	const { data, error } = await supabase.from('files').select().eq('team', 13).order('date', { ascending: false });
 	const { data: dataEvent, error:errorEvent } = await supabase.from('event').select().eq('team', 13).order('id', { ascending: true });
 	const { data: teamList, error:errorTeam } = await supabase.from('team').select().order('id', { ascending: true });
 
@@ -54,7 +54,8 @@ export const actions: Actions = {
 				label: form.data.label,
 				type: form.data.type,
 				link: form.data.link,
-				importance: form.data.importance
+				importance: form.data.importance,
+				team: 13
 			})
 			.select();
 
@@ -163,7 +164,6 @@ export const actions: Actions = {
 	},
 	updateEvent: async (event) => {
 		const form = await superValidate(event, zod(eventSchema));
-		console.log(form.data);
 		//   client checking
 		if (!form.valid) {
 			return fail(400, {
@@ -179,6 +179,7 @@ export const actions: Actions = {
 				start: form.data.start,
 				end: form.data.end,
 				team: form.data.team,
+				updated_at: new Date().toISOString()
 			})
 			.eq("id", form.data.id);
 

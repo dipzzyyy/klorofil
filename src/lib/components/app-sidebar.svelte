@@ -21,7 +21,7 @@
 		navMain: [
 			{
 				title: "Dashboard",
-				url: "/dashboard",
+				url: "/",
 				icon: LayoutDashboardIcon,
 				isActive: true,
 				items: [
@@ -30,7 +30,7 @@
 			},
 			{
 				title: "Tim",
-				url: "#",
+				url: "/",
 				icon: HandshakeIcon,
 				items: [
 					{
@@ -61,7 +61,7 @@
 			},
 			{
 				title: "Sub Tim",
-				url: "#",
+				url: "/",
 				icon: BoxesIcon,
 				items: [
 					{
@@ -176,7 +176,7 @@
 			<Sidebar.MenuItem>
 				<Sidebar.MenuButton size="lg">
 					{#snippet child({ props })}
-						<a href="##" {...props}>
+						<a href="/" {...props}>
 							<div
 								class="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg"
 							>
