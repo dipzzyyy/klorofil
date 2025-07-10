@@ -79,7 +79,7 @@
         <Form.Control>
             {#snippet children({ props })}
             <Form.Label>Nama Kegiatan*</Form.Label>
-            <Input {...props} bind:value={$formEvent.name} placeholder="Masukkan judul fail" />
+            <Input {...props} bind:value={$formEvent.name} placeholder="Masukkan judul kegiatan" />
             {/snippet}
         </Form.Control>
         <Form.FieldErrors />
@@ -89,7 +89,7 @@
         <Form.Control>
             {#snippet children({ props })}
             <Form.Label>Deskripsi</Form.Label>
-            <Input {...props} bind:value={$formEvent.description} placeholder="Deskripsi fail" />
+            <Input {...props} bind:value={$formEvent.description} placeholder="Deskripsi kegiatan" />
             {/snippet}
         </Form.Control>
         <Form.FieldErrors />
@@ -163,7 +163,7 @@
     </Select.Root>
     <input type="hidden" name="team" value={$formEvent.team} />
     </Form.Control>
-    <Form.Description>Pilih tim yang terlibat. Untuk semua pegawai dapat menggunakan tim "General"</Form.Description>
+    <Form.Description>Pilih tim yang terlibat.</Form.Description>
     <Form.FieldErrors />
     </Form.Field>
     <Form.Button>Tambahkan</Form.Button>

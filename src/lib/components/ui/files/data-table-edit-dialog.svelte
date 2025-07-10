@@ -91,7 +91,7 @@
                     <label for="type" class="font-semibold">Tipe fail</label>
                     <div class="flex gap-2">
                         <input type="hidden" name="type" value={type}/>
-                        <Toggle pressed={filePressed} onPressedChange={(v) => { filePressed = v; updateType(); }}>File</Toggle>
+                        <Toggle pressed={filePressed} onPressedChange={(v) => { filePressed = v; updateType(); }}>Fail</Toggle>
                         <Toggle pressed={announcementPressed} onPressedChange={(v) => { announcementPressed = v; updateType(); }}>Pengumuman</Toggle>
                     </div>
                 </div>
@@ -132,13 +132,13 @@
                     onValueChange={handleLabelChange}
                 >
                     <Select.Trigger class="w-full">
-                        {label || "Pilih atau masukkan label"}
+                        {label || "Pilih atau masukkan kategori"}
                     </Select.Trigger>
                     <Select.Content class="w-full">
                         {#each extendLabels as l}
                             <Select.Item value={l} label={l} />
                         {/each}
-                        <Select.Item value="__custom__" label="Tambah label baru..." />
+                        <Select.Item value="__custom__" label="Tambah kategori baru..." />
                     </Select.Content>
                 </Select.Root>
             {:else}
@@ -146,7 +146,7 @@
                     <Input
                         name="label"
                         bind:value={customLabelInput}
-                        placeholder="Masukkan label baru"
+                        placeholder="Masukkan kategori baru"
                         class="w-full mt-2"
                     />
                     <button
@@ -247,13 +247,13 @@
                             onValueChange={handleLabelChange}
                         >
                             <Select.Trigger class="w-full">
-                                {label || "Pilih atau masukkan label"}
+                                {label || "Pilih atau masukkan kategori"}
                             </Select.Trigger>
                             <Select.Content class="w-full">
                                 {#each extendLabels as l}
                                     <Select.Item value={l} label={l} />
                                 {/each}
-                                <Select.Item value="__custom__" label="Tambah label baru..." />
+                                <Select.Item value="__custom__" label="Tambah kategori baru..." />
                             </Select.Content>
                         </Select.Root>
                     {:else}
@@ -261,7 +261,7 @@
                             <Input
                                 name="label"
                                 bind:value={customLabelInput}
-                                placeholder="Masukkan label baru"
+                                placeholder="Masukkan kategori baru"
                                 class="w-full mt-2"
                             />
                             <button

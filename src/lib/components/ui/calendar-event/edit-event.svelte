@@ -160,8 +160,6 @@
     <Form.FieldErrors />
     </Form.Field>
 
-
-
       <!-- Team -->
     <Form.Field {form} name="team">
         <Form.Control>
